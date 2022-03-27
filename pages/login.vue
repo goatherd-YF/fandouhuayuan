@@ -10,27 +10,27 @@
       <el-form ref="userForm" :model="user">
 
         <el-form-item
-          :rules="[{ required: true, message: '请输入手机号码', trigger: 'blur' },{validator: checkPhone, trigger: 'blur'}]"
+          :rules="[{ required: true, message: '请输入邮箱', trigger: 'blur' },{validator: checkEmail, trigger: 'blur'}]"
           class="input-prepend restyle"
-          prop="mobile">
+          prop="userEmail">
           <div>
-            <el-input v-model="user.mobile" type="text" placeholder="手机号"/>
-            <i class="iconfont icon-phone"/>
+            <el-input v-model="user.userEmail" type="text" placeholder="邮箱"/>
+            <i class="iconfont icon-qq"/>
           </div>
         </el-form-item>
 
         <el-form-item
           :rules="[{ required: true, message: '请输入密码', trigger: 'blur' }]"
           class="input-prepend"
-          prop="password">
+          prop="userPassword">
           <div>
-            <el-input v-model="user.password" type="password" placeholder="密码"/>
+            <el-input v-model="user.userPassword" type="password" placeholder="密码"/>
             <i class="iconfont icon-password"/>
           </div>
         </el-form-item>
 
         <div class="btn">
-          <input type="button" class="sign-in-button" value="登录" @click="submitLogin()">
+          <input type="button" class="sign-in-button" value="登录" @click="submitLogin">
         </div>
       </el-form>
       <!-- 更多登录方式 -->
@@ -41,9 +41,9 @@
             id="weixin"
             class="weixin"
             target="_blank"
-            href="http://qy.free.idcfengye.com/api/ucenter/weixinLogin/login"><i class="iconfont icon-weixin"/></a>
+            href="http://localhost:8160/api/ucenter/wx/login"><i class="iconfont icon-weixin"/></a>
           </li>
-          <li><a id="qq" class="qq" target="_blank" href="#"><i class="iconfont icon-qq"/></a></li>
+          <!--          <li><a id="qq" class="qq" target="_blank" href="#"><i class="iconfont icon-qq"/></a></li>-->
         </ul>
       </div>
     </div>
@@ -54,7 +54,8 @@
 <script>
 import '~/assets/css/sign.css'
 import '~/assets/css/iconfont.css'
-// import cookie from 'js-cookie'
+import cookie from 'js-cookie'
+import { loginUser, getUserLoginInfo, weChatLogin } from '@/api/login'
 
 export default {
   layout: 'sign',
@@ -62,19 +63,45 @@ export default {
   data() {
     return {
       user: {
-        mobile: '',
-        password: ''
+        userEmail: '',
+        userPassword: ''
       },
       loginInfo: {}
     }
   },
 
   methods: {
-
-    checkPhone(rule, value, callback) {
+    loginWechat() {
+      weChatLogin()
+    },
+    submitLogin() {
+      if (this.user.userEmail !== '' && this.user.userPassword !== '') {
+        loginUser(this.user).then(response => {
+          if (response.data.code === 200) {
+            // 把token存在cookie中、也可以放在localStorage中
+            console.log('token', response.data.msg)
+            cookie.set('MyToken', response.data.msg, { domain: 'localhost' })
+            console.log(cookie)
+            // 登录成功根据token获取用户信息
+            getUserLoginInfo().then(response => {
+              // 将用户信息记录cookie
+              cookie.set('loginUser', JSON.stringify(response.data.data.user), { domain: 'localhost' })
+              debugger
+              // 跳转页面
+              window.location.href = '/'
+            })
+          } else {
+            this.$message.error(response.data.msg)
+          }
+        })
+      } else {
+        this.$message.error('请输入您的信息！')
+      }
+    },
+    checkEmail(rule, value, callback) {
       // debugger
-      if (!(/^1[34578]\d{9}$/.test(value))) {
-        return callback(new Error('手机号码格式不正确'))
+      if (!(/^([0-9A-Za-z\-_\.]+)@([0-9a-z]+\.[a-z]{2,3}(\.[a-z]{2})?)$/.test(value))) {
+        return callback(new Error('邮箱格式不正确'))
       }
       return callback()
     }

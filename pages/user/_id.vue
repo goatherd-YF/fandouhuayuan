@@ -1,0 +1,194 @@
+<template>
+  <div id="aCoursesList" class="bg-fa of">
+    <!-- 讲师介绍 开始 -->
+    <section class="container">
+      <header class="comm-title">
+        <h2 class="fl tac">
+          <span class="c-333">用户介绍</span>
+        </h2>
+      </header>
+      <div class="t-infor-wrap">
+        <!-- 用户基本信息 -->
+        <section class="fl t-infor-box c-desc-content">
+          <div class="mt20 ml20">
+            <section class="t-infor-pic">
+              <img :src="user.avatar">
+            </section>
+            <section class="mt10">
+              <span class="t-tag-bg">用户名称：{{ user.userName }}</span>
+            </section>
+            <section class="mt10">
+              <span class="t-tag-bg">用户性别：{{ user.userSex }}</span>
+            </section>
+            <section v-if="loginInfo.userId == user.userId" class="mt10">
+              <span class="t-tag-bg">账户余额：{{ user.count }}</span>
+            </section>
+            <section class="mt10">
+              <span class="t-tag-bg">用户等级： {{ user.userLevel }}</span>
+            </section>
+            <section class=" t-tag-bg">
+              <p
+                class="mt10"
+              >用户描述：</p>
+              <p>&nbsp;&nbsp;&nbsp;&nbsp;{{ user.userDescribe }}</p>
+            </section>
+            <section v-if="loginInfo.userId == user.userId" class="mt10" >
+              <router-link to="/user/userSave/" tag="li" active-class="current">
+                <a>修改信息</a>
+              </router-link>
+            </section>
+            <div class="clear"/>
+          </div>
+        </section>
+        <div class="clear"/>
+      </div>
+      <section class="mt30">
+        <div>
+          <header class="comm-title all-teacher-title c-course-content">
+            <h2 class="fl tac">
+              <span class="c-333">商品</span>
+            </h2>
+            <section class="c-tab-title">
+              <a href="javascript: void(0)">&nbsp;</a>
+            </section>
+          </header>
+          <!-- /无数据提示 开始-->
+          <section v-if="goodsList.length == 0" class="no-data-wrap">
+            <em class="icon30 no-data-ico">&nbsp;</em>
+            <span class="c-666 fsize14 ml10 vam">该用户没有出售商品。。。</span>
+          </section>
+          <!-- /无数据提示 结束-->
+          <article class="comm-course-list">
+            <ul class="of">
+              <li v-for="goods in goodsList" :key="goods.goodsId">
+                <div class="cc-l-wrap">
+                  <section class="course-img">
+                    <img
+                      :src="goods.goodsPicture1"
+                      class="img-responsive">
+                    <div class="cc-mask">
+                      <a
+                        :title="goods.goodsName"
+                        :href="'/goods/'+goods.goodsId"
+                        target="_blank"
+                        class="comm-btn c-btn-1">详情</a>
+                    </div>
+                  </section>
+                  <h3 class="hLh30 txtOf mt10">
+                    <a
+                      :title=" goods.goodsName "
+                      href="#"
+                      target="_blank"
+                      class="course-title fsize18 c-333">{{ goods.goodsDescribe }}</a>
+                  </h3>
+                </div>
+              </li>
+              <!--              <li>-->
+              <!--                <div class="cc-l-wrap">-->
+              <!--                  <section class="course-img">-->
+              <!--                    <img-->
+              <!--                      src="~/assets/photo/course/1442295472860.jpg"-->
+              <!--                      class="img-responsive" >-->
+              <!--                    <div class="cc-mask">-->
+              <!--                      <a href="#" title="开始学习" target="_blank" class="comm-btn c-btn-1">开始学习</a>-->
+              <!--                    </div>-->
+              <!--                  </section>-->
+              <!--                  <h3 class="hLh30 txtOf mt10">-->
+              <!--                    <a-->
+              <!--                      href="#"-->
+              <!--                      title="影想力摄影小课堂"-->
+              <!--                      target="_blank"-->
+              <!--                      class="course-title fsize18 c-333">影想力摄影小课堂</a>-->
+              <!--                  </h3>-->
+              <!--                </div>-->
+              <!--              </li>-->
+              <!--              <li>-->
+              <!--                <div class="cc-l-wrap">-->
+              <!--                  <section class="course-img">-->
+              <!--                    <img-->
+              <!--                      src="~/assets/photo/course/1442302831779.jpg"-->
+              <!--                      class="img-responsive" >-->
+              <!--                    <div class="cc-mask">-->
+              <!--                      <a href="#" title="开始学习" target="_blank" class="comm-btn c-btn-1">开始学习</a>-->
+              <!--                    </div>-->
+              <!--                  </section>-->
+              <!--                  <h3 class="hLh30 txtOf mt10">-->
+              <!--                    <a-->
+              <!--                      href="#"-->
+              <!--                      title="数学给宝宝带来的兴趣"-->
+              <!--                      target="_blank"-->
+              <!--                      class="course-title fsize18 c-333">数学给宝宝带来的兴趣</a>-->
+              <!--                  </h3>-->
+              <!--                </div>-->
+              <!--              </li>-->
+              <!--              <li>-->
+              <!--                <div class="cc-l-wrap">-->
+              <!--                  <section class="course-img">-->
+              <!--                    <img-->
+              <!--                      src="~/assets/photo/course/1442295506745.jpg"-->
+              <!--                      class="img-responsive" >-->
+              <!--                    <div class="cc-mask">-->
+              <!--                      <a href="#" title="开始学习" target="_blank" class="comm-btn c-btn-1">开始学习</a>-->
+              <!--                    </div>-->
+              <!--                  </section>-->
+              <!--                  <h3 class="hLh30 txtOf mt10">-->
+              <!--                    <a-->
+              <!--                      href="#"-->
+              <!--                      title="国家教师资格考试专用"-->
+              <!--                      target="_blank"-->
+              <!--                      class="course-title fsize18 c-333">国家教师资格考试专用</a>-->
+              <!--                  </h3>-->
+              <!--                </div>-->
+              <!--              </li>-->
+            </ul>
+            <div class="clear"/>
+          </article>
+        </div>
+      </section>
+    </section>
+    <!-- /讲师介绍 结束 -->
+  </div>
+</template>
+<script>
+import { findById } from '@/api/user'
+import { goodsList } from '@/api/goods'
+import cookie from 'js-cookie'
+
+export default {
+  data() {
+    return {
+      user: {},
+      goodsList: [],
+      loginInfo: {}
+    }
+  },
+  created() {
+    if (this.$route.params.id) {
+      console.log(this.$route.params.id, 'id')
+      this.getUserInfo(this.$route.params.id)
+      this.getGoodsByUserId(this.$route.params.id)
+      this.showInfo()
+    }
+  },
+  methods: {
+    getUserInfo(id) {
+      findById(id).then(res => {
+        console.log(res, 'user')
+        this.user = res.data.data
+      })
+    },
+    getGoodsByUserId(id) {
+      goodsList(-1, -1, { sellerId: id }).then(res => {
+        console.log(res, 'goods')
+        this.goodsList = res.data.data.rows
+      })
+    },
+    showInfo() {
+      var jsonStr = cookie.get('loginUser')
+      if (jsonStr) {
+        this.loginInfo = JSON.parse(jsonStr)
+      }
+    }
+  }
+}
+</script>

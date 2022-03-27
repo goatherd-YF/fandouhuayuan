@@ -2,7 +2,7 @@ module.exports = {
   // before: require('./mock/mock-server.js')
   proxy: {
     '/dev-api': {
-      target: 'http://localhost:8080',
+      target: 'http://localhost:8160',
       // pathRewrite 表示代理路径是否是 URL 的一部分
       // 默认不写 pathRewrite，/api 就是 URL 的一部分，开发环境和生产环境都不能去掉
       pathRewrite: {'^/dev-api' : ''} // api 只在开发环境下有，不是 URL 的一部分
