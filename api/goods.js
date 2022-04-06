@@ -8,6 +8,14 @@ export function goodsList(current, limit, goods) {
   })
 }
 
+export function goodsBySellerId(goods) {
+  return request({
+    url: `/goods/goodsBySellerId`,
+    method: 'post',
+    data: goods
+  })
+}
+
 export function removeGoodsById(id) {
   return request({
     url: `/goods/${id}`,

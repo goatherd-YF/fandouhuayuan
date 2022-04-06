@@ -9,6 +9,14 @@ export function cartList(current, limit, cart) {
   })
 }
 
+export function listByCart(cart) {
+  return request({
+    url: `/cart/listByCart`,
+    method: 'post',
+    data: cart
+  })
+}
+
 // 根据id删除类别
 export function removeCartById(id) {
   return request({

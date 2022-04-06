@@ -62,7 +62,7 @@
         <el-input v-model="loginInfo.userEmail"/>
       </el-form-item>
       <el-form-item label="用户电话" style="width: 60%">
-        <el-input v-model="loginInfo.userPhone" maxlength="10" show-word-limit/>
+        <el-input v-model="loginInfo.userPhone" maxlength="11" show-word-limit/>
       </el-form-item>
       <el-form-item label="用户描述" style="width: 60%">
         <el-input v-model="loginInfo.userDescribe" :rows="10" type="textarea" maxlength="300" show-word-limit/>

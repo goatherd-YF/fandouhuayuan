@@ -9,6 +9,13 @@ export function orderList(current, limit, order) {
   })
 }
 
+export function listByOrder(order) {
+  return request({
+    url: `/order/listByOrder`,
+    method: 'post',
+    data: order
+  })
+}
 // 根据id删除类别
 export function removeOrderById(id) {
   return request({

@@ -154,20 +154,25 @@ export default {
     },
     // 通过输入邮件发送验证码
     getCodeFun() {
-      sendMail(this.user.userEmail)
-        .then(response => {
-          console.log(response)
-          const result = response.data
-          console.log(result)
-          if (result.code !== 200) {
-            this.$message.error(result.msg)
-          } else {
-            this.$message.success(result.msg)
-            this.sending = false
-            // 调用倒计时的方法
-            this.timeDown()
-          }
-        })
+      if(this.user.userEmail){
+        sendMail(this.user.userEmail)
+          .then(response => {
+            console.log(response)
+            const result = response.data
+            console.log(result)
+            if (result.code !== 200) {
+              this.$message.error(result.msg)
+            } else {
+              this.$message.success(result.msg)
+              this.sending = false
+              // 调用倒计时的方法
+              this.timeDown()
+            }
+          })
+      }else {
+        this.$message.error("邮件不能为空")
+      }
+
     },
     checkPhone(rule, value, callback) {
       // debugger

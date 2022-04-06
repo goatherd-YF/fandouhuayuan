@@ -60,7 +60,6 @@
                     </section>
                   </div>
                 </li>
-
               </ul>
               <div class="clear"/>
             </article>
@@ -68,13 +67,10 @@
               <router-link to="/goods/goods" tag="li" active-class="current">
                 <a class="comm-btn c-btn-2">全部商品</a>
               </router-link>
-              <!--              <a href="#" title="全部课程" class="comm-btn c-btn-2">全部商品</a>-->
             </section>
           </div>
         </section>
       </div>
-      <!-- /网校课程 结束 -->
-      <!-- 网校名师 开始 -->
       <div>
         <section class="container">
           <header class="comm-title">
@@ -109,13 +105,10 @@
               </ul>
               <div class="clear"/>
             </article>
-            <!--            <section class="tac pt20">-->
-            <!--              <a href="#" title="全部讲师" class="comm-btn c-btn-2"></a>-->
-            <!--            </section>-->
+
           </div>
         </section>
       </div>
-      <!-- /网校名师 结束 -->
     </div>
   </div>
 </template>

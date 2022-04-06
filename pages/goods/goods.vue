@@ -1,6 +1,5 @@
 <template>
   <div id="aCoursesList" class="bg-fa of">
-    <!-- /课程列表 开始 -->
     <section class="container">
       <header class="comm-title">
         <h2 class="fl tac">
@@ -58,7 +57,7 @@
                       </div>
                     </div>
                     <div class="item-box_footer">
-                      <div class="item-box_detailsItem"><i class="icon icon-rl sm"/>上传时间：{{ good.createTime }}</div>
+                      <div class="item-box_detailsItem"><i class="icon icon-rl sm"/>上传时间：{{ good.createTime.substring(0,10) }}</div>
                       <div class="item-box_detailsItem"><i class="icon icon-wenjianbao sm"/>商品价格: ￥{{ good.goodsPrice }}
                       </div>
                       <div class="item-box_footerButtons"><a class="circleButton btn_like" _id="12110"><i
@@ -66,13 +65,14 @@
                         title="点击收藏"/></a></div>
                       <div class="item-box_alignBottom">
                         <a
+                          :href="'/goods/'+good.goodsId"
                           class="btn_down"
-                          href="/item/12110"
                           target="_blank">详情</a>
-                        <a
+                        <div
+                          v-show="!isExist"
                           class="btn_preview"
-                          href="/item/12110/preview"
-                          target="_blank">加入购物车</a>
+                          href="#"
+                          target="_blank">加入购物车</div>
                         <a
                           class="btn_preview"
                           href="/item/12110/preview"
@@ -83,35 +83,7 @@
                 </div>
                 <div class="pagemain"/>
               </div>
-              <!--列表结束-->
-              <!--              <ul id="bna" class="of">-->
-              <!--                <li v-for="item in data.items" :key="item.id">-->
-              <!--                  <div class="cc-l-wrap">-->
-              <!--                    <section class="course-img">-->
-              <!--                      <img :src="item.cover" :alt="item.title" class="img-responsive">-->
-              <!--                      <div class="cc-mask">-->
-              <!--                        <a :href="'/course/'+item.id" title="开始学习" class="comm-btn c-btn-1">开始学习</a>-->
-              <!--                      </div>-->
-              <!--                    </section>-->
-              <!--                    <h3 class="hLh30 txtOf mt10">-->
-              <!--                      <a :href="'/course/'+item.id" :title="item.title" class="course-title fsize18 c-333">{{-->
-              <!--                        item.title-->
-              <!--                      }}</a>-->
-              <!--                    </h3>-->
-              <!--                    <section class="mt10 hLh20 of">-->
-              <!--                      <span v-if="Number(item.price) === 0" class="fr jgTag bg-green">-->
-              <!--                        <i class="c-fff fsize12 f-fA">免费</i>-->
-              <!--                      </span>-->
-              <!--                      <span class="fl jgAttr c-ccc f-fA">-->
-              <!--                        <i class="c-999 f-fA">9634人学习</i>-->
-              <!--                        |-->
-              <!--                        <i class="c-999 f-fA">9634评论</i>-->
-              <!--                      </span>-->
-              <!--                    </section>-->
-              <!--                  </div>-->
-              <!--                </li>-->
 
-              <!--              </ul>-->
               <div class="clear"/>
             </div>
           </article>
@@ -171,7 +143,8 @@ export default {
         goodsPicture3: undefined,
         createTime: undefined,
         updateTime: undefined
-      }
+      },
+      isExist: false
     }
   },
   created() {

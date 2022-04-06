@@ -179,12 +179,13 @@ export default {
       getUserLoginInfo().then(response => {
         this.loginInfo = response.data.data.user
         // 将用户信息记录cookie
-        cookie.set('loginUser', this.loginInfo, { domain: 'localhost' })
+        cookie.set('loginUser', JSON.stringify(this.loginInfo), { domain: 'localhost' })
       })
     },
 
     showInfo() {
       var jsonStr = cookie.get('loginUser')
+      console.log(typeof jsonStr)
       if (jsonStr) {
         this.loginInfo = JSON.parse(jsonStr)
       }

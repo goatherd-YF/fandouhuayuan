@@ -1,6 +1,5 @@
 <template>
   <div id="aCoursesList" class="bg-fa of">
-    <!-- 讲师介绍 开始 -->
     <section class="container">
       <header class="comm-title">
         <h2 class="fl tac">
@@ -83,70 +82,12 @@
                   </h3>
                 </div>
               </li>
-              <!--              <li>-->
-              <!--                <div class="cc-l-wrap">-->
-              <!--                  <section class="course-img">-->
-              <!--                    <img-->
-              <!--                      src="~/assets/photo/course/1442295472860.jpg"-->
-              <!--                      class="img-responsive" >-->
-              <!--                    <div class="cc-mask">-->
-              <!--                      <a href="#" title="开始学习" target="_blank" class="comm-btn c-btn-1">开始学习</a>-->
-              <!--                    </div>-->
-              <!--                  </section>-->
-              <!--                  <h3 class="hLh30 txtOf mt10">-->
-              <!--                    <a-->
-              <!--                      href="#"-->
-              <!--                      title="影想力摄影小课堂"-->
-              <!--                      target="_blank"-->
-              <!--                      class="course-title fsize18 c-333">影想力摄影小课堂</a>-->
-              <!--                  </h3>-->
-              <!--                </div>-->
-              <!--              </li>-->
-              <!--              <li>-->
-              <!--                <div class="cc-l-wrap">-->
-              <!--                  <section class="course-img">-->
-              <!--                    <img-->
-              <!--                      src="~/assets/photo/course/1442302831779.jpg"-->
-              <!--                      class="img-responsive" >-->
-              <!--                    <div class="cc-mask">-->
-              <!--                      <a href="#" title="开始学习" target="_blank" class="comm-btn c-btn-1">开始学习</a>-->
-              <!--                    </div>-->
-              <!--                  </section>-->
-              <!--                  <h3 class="hLh30 txtOf mt10">-->
-              <!--                    <a-->
-              <!--                      href="#"-->
-              <!--                      title="数学给宝宝带来的兴趣"-->
-              <!--                      target="_blank"-->
-              <!--                      class="course-title fsize18 c-333">数学给宝宝带来的兴趣</a>-->
-              <!--                  </h3>-->
-              <!--                </div>-->
-              <!--              </li>-->
-              <!--              <li>-->
-              <!--                <div class="cc-l-wrap">-->
-              <!--                  <section class="course-img">-->
-              <!--                    <img-->
-              <!--                      src="~/assets/photo/course/1442295506745.jpg"-->
-              <!--                      class="img-responsive" >-->
-              <!--                    <div class="cc-mask">-->
-              <!--                      <a href="#" title="开始学习" target="_blank" class="comm-btn c-btn-1">开始学习</a>-->
-              <!--                    </div>-->
-              <!--                  </section>-->
-              <!--                  <h3 class="hLh30 txtOf mt10">-->
-              <!--                    <a-->
-              <!--                      href="#"-->
-              <!--                      title="国家教师资格考试专用"-->
-              <!--                      target="_blank"-->
-              <!--                      class="course-title fsize18 c-333">国家教师资格考试专用</a>-->
-              <!--                  </h3>-->
-              <!--                </div>-->
-              <!--              </li>-->
             </ul>
             <div class="clear"/>
           </article>
         </div>
       </section>
     </section>
-    <!-- /讲师介绍 结束 -->
   </div>
 </template>
 <script>
