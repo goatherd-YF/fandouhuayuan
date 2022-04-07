@@ -42,7 +42,7 @@
                         class="img-responsive"
                       >
                       <div class="cc-mask">
-                        <a title="详情" href="#" class="comm-btn c-btn-1">详情</a>
+                        <a title="详情" :href="'./goods/'+goods.goodsId" class="comm-btn c-btn-1">详情</a>
                       </div>
                     </section>
                     <h3 class="hLh30 txtOf mt10">
