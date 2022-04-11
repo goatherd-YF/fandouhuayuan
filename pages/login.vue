@@ -86,7 +86,6 @@ export default {
             getUserLoginInfo().then(response => {
               // 将用户信息记录cookie
               cookie.set('loginUser', JSON.stringify(response.data.data.user), { domain: 'localhost' })
-              debugger
               // 跳转页面
               window.location.href = '/'
             })
@@ -99,7 +98,6 @@ export default {
       }
     },
     checkEmail(rule, value, callback) {
-      // debugger
       if (!(/^([0-9A-Za-z\-_\.]+)@([0-9a-z]+\.[a-z]{2,3}(\.[a-z]{2})?)$/.test(value))) {
         return callback(new Error('邮箱格式不正确'))
       }

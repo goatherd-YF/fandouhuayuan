@@ -1,5 +1,17 @@
 import request from '@/utils/request'
 
+createOrders
+
+// 获取类别列表
+export function createOrders(data) {
+  return request({
+    url: `/order/create`,
+    method: 'get',
+    params: data
+  })
+}
+
+
 // 获取类别列表
 export function orderList(current, limit, order) {
   return request({
@@ -16,6 +28,7 @@ export function listByOrder(order) {
     data: order
   })
 }
+
 // 根据id删除类别
 export function removeOrderById(id) {
   return request({
@@ -25,7 +38,7 @@ export function removeOrderById(id) {
 }
 
 // 根据id获取类别
-export function findById(id) {
+export function getOrdersInfo(id) {
   return request({
     url: `/order/${id}`,
     method: 'get'

@@ -57,7 +57,9 @@
                       </div>
                     </div>
                     <div class="item-box_footer">
-                      <div class="item-box_detailsItem"><i class="icon icon-rl sm"/>上传时间：{{ good.createTime.substring(0,10) }}</div>
+                      <div class="item-box_detailsItem"><i
+                        class="icon icon-rl sm"/>上传时间：{{ good.createTime.substring(0, 10) }}
+                      </div>
                       <div class="item-box_detailsItem"><i class="icon icon-wenjianbao sm"/>商品价格: ￥{{ good.goodsPrice }}
                       </div>
                       <div class="item-box_footerButtons"><a class="circleButton btn_like" _id="12110"><i
@@ -69,10 +71,11 @@
                           class="btn_down"
                           target="_blank">详情</a>
                         <div
-                          v-show="!isExist"
                           class="btn_preview"
                           href="#"
-                          target="_blank">加入购物车</div>
+                          target="_blank"
+                          @click="add(good)">{{ good.goodsState }}
+                        </div>
                         <a
                           class="btn_preview"
                           href="/item/12110/preview"
@@ -104,8 +107,11 @@
   </div>
 </template>
 <script>
-import { goodsList } from '@/api/goods'
-import { categoryList } from '@/api/category'
+import {goodsList} from '@/api/goods'
+import {categoryList} from '@/api/category'
+import {listByCart, updateOrSaveCart} from "@/api/cart";
+import {getLoginInfo} from "@/api/loginInfo";
+import cookie from "js-cookie";
 
 export default {
   data() {
@@ -114,6 +120,7 @@ export default {
       // 类别
       categoryList: [],
       goodsList: [],
+      cartList: [],
       oneIndex: -1,
       buyCountSort: '',
       gmtCreateSort: '',
@@ -144,23 +151,52 @@ export default {
         createTime: undefined,
         updateTime: undefined
       },
+      loginInfo: {},
       isExist: false
     }
   },
   created() {
+    this.showInfo()
     // 查询所有商品
     this.getGoods()
     // 显示分类
     this.getCategory()
+    this.getCartList()
+    //购物车按钮
+    this.compared()
   },
   methods: {
+    compared() {
+      //此处给goodsList的state赋值 进行过滤
+      this.goodsList = this.goodsList.filter(item => {
+        item.goodsState = '加入购物车'
+        console.log(item.goodsState)
+      })
+
+    },
+    getCartList() {
+      listByCart({userId: this.userId}).then(response => {
+        console.log(response, 'cartList')
+        this.cartList = response.data.data
+      })
+    },
+    add(item) {
+      //为加入购物车才可用
+      if (item.goodsState == '加入购物车') {
+        updateOrSaveCart({userId: this.userId, goodsId: item.goodsId, sellerId: item.sellerID}).then(res => {
+          this.$message.success("加入成功")
+          item.goodsState = '加入成功'
+        })
+      }
+    },
     // 1 查询第一页数据
     getGoods(pageNum) {
       if (pageNum !== undefined) {
         this.page = pageNum
       }
       this.oneIndex = -1
-      this.searchObj = {}
+      //状态可用的数据
+      this.searchObj = {goodsState: 'true'}
       console.log(this.page, ' this.page')
       goodsList(this.page, this.limit, this.searchObj).then(response => {
         this.goodsList = response.data.data.rows
@@ -189,7 +225,6 @@ export default {
       })
     },
     pageList(val) {
-      debugger
       console.log(val)
       this.page = val
       console.log(this.page, ' this.page')
@@ -197,6 +232,15 @@ export default {
         this.getGoods()
       } else {
         this.getGoodsByCategoryId(this.searchObj.categoryId, this.oneIndex)
+      }
+    },
+    showInfo() {
+      var jsonStr = cookie.get('loginUser')
+      console.log(typeof jsonStr)
+      if (jsonStr) {
+        this.loginInfo = JSON.parse(jsonStr)
+        if (!this.loginInfo.userAddress && !this.loginInfo.userEmail) {
+        }
       }
     }
   }

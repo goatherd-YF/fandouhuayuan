@@ -11,7 +11,7 @@
         <section class="fl t-infor-box c-desc-content">
           <div class="mt20 ml20">
             <section class="t-infor-pic">
-              <img :src="user.avatar">
+              <img style="width: 300px;height: 300px" :src="user.avatar">
             </section>
             <section class="mt10">
               <span class="t-tag-bg">用户名称：{{ user.userName }}</span>
@@ -31,11 +31,11 @@
               >用户描述：</p>
               <p>&nbsp;&nbsp;&nbsp;&nbsp;{{ user.userDescribe }}</p>
             </section>
-            <section v-if="loginInfo.userId == user.userId" class="mt10" >
-              <router-link to="/user/userSave/" tag="li" active-class="current">
-                <a>修改信息</a>
-              </router-link>
-            </section>
+<!--            <section v-if="loginInfo.userId == user.userId" class="mt10" >-->
+<!--              <router-link to="/user/userSave/" tag="li" active-class="current">-->
+<!--                <a>修改信息</a>-->
+<!--              </router-link>-->
+<!--            </section>-->
             <div class="clear"/>
           </div>
         </section>

@@ -142,7 +142,7 @@ export default {
   },
   methods: {
     getGoodsList() {
-      goodsList(1, 8, { goodsLevel: '五星商户' }).then(response => {
+      goodsList(1, 8, { goodsState: 'true'}).then(response => {
         this.goodsList = response.data.data.rows
         console.log(response)
       })

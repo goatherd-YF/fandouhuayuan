@@ -53,6 +53,7 @@ export default {
   name: 'MyMessage',
   data() {
     return {
+
       loginInfo: {}
     }
   },
@@ -76,5 +77,6 @@ height: 500px;
 }
 .t-infor-pic{
   height: 300px;
+  width: 300px;
 }
 </style>

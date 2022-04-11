@@ -135,6 +135,13 @@ import '~/assets/css/reset.css'
 import '~/assets/css/theme.css'
 import '~/assets/css/global.css'
 import '~/assets/css/web.css'
+import '~/assets/css/base.css'
+import '~/assets/css/activity_tab.css'
+import '~/assets/css/bottom_rec.css'
+import '~/assets/css/nice_select.css'
+import '~/assets/css/order.css'
+import '~/assets/css/swiper-3.3.1.min.css'
+import "~/assets/css/pages-weixinpay.css"
 import cookie from 'js-cookie'
 import { getUserLoginInfo } from '@/api/login'
 
@@ -165,6 +172,7 @@ export default {
       this.wxLogin()
     }
     this.showInfo()
+
   },
   methods: {
     searchGoods() {
@@ -188,6 +196,11 @@ export default {
       console.log(typeof jsonStr)
       if (jsonStr) {
         this.loginInfo = JSON.parse(jsonStr)
+        if(!this.loginInfo.userAddress && !this.loginInfo.userEmail){
+          this.$router.push("../user/userSave")
+        }
+      }else{
+        this.$router.push("../login")
       }
     },
     logout() {

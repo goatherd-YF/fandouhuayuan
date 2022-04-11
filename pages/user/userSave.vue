@@ -43,16 +43,25 @@
         <el-input v-model.number="loginInfo.userAge" autocomplete="off"/>
       </el-form-item>
       <el-form-item
+
         :rules="[
           { required: true, message: '地址不能为空'}
         ]"
         style="width: 60%"
         prop="userAddress"
-        label="用户地址">
-        <el-input
-          v-model="loginInfo.userAddress"
-          maxlength="10"
-          show-word-limit/>
+        label="交易地址">
+        <el-select v-model="loginInfo.userAddress" placeholder="请选择交易地址" style="width: 100%" >
+          <el-option
+            v-for="item in options"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+<!--        <el-input-->
+<!--          v-model="loginInfo.userAddress"-->
+<!--          maxlength="10"-->
+<!--          show-word-limit/>-->
       </el-form-item>
       <el-form-item
         :rules="[{ required: true, message: '请输入邮箱', trigger: 'blur' },{validator: checkEmail, trigger: 'blur'}]"
@@ -79,13 +88,23 @@
 </template>
 
 <script>
-import { updateOrSaveUser } from '@/api/user'
+import {updateOrSaveUser} from '@/api/user'
 import cookie from 'js-cookie'
 
 export default {
   name: 'UserSave',
   data() {
     return {
+      options: [{
+        value: '西苑食堂一楼',
+        label: '西苑食堂一楼'
+      }, {
+        value: '中苑食堂一楼',
+        label: '中苑食堂一楼'
+      }, {
+        value: '东苑食堂一楼',
+        label: '东苑食堂一楼'
+      }],
       loginInfo: {
         userId: undefined,
         userName: undefined,
@@ -149,7 +168,7 @@ export default {
         }
       )
       // 更新cookie
-      cookie.set('loginUser', JSON.stringify(this.loginInfo), { domain: 'localhost' })
+      cookie.set('loginUser', JSON.stringify(this.loginInfo), {domain: 'localhost'})
     },
     showInfo() {
       var jsonStr = cookie.get('loginUser')

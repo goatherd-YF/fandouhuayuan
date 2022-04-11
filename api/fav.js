@@ -9,11 +9,11 @@ export function queryFav(fav) {
   })
 }
 
-export function removeFavById(id) {
+export function removeFavById(fav) {
   return request({
     url: `/fav/remove`,
-    method: 'get',
-    params: id
+    method: 'post',
+    data: fav
   })
 }
 

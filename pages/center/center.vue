@@ -92,10 +92,6 @@
                       class="btn_down"
                       :href="'../goods/'+good.goodsId"
                       target="_blank">详情</a>
-                    <a
-                      class="btn_preview"
-                      href="/item/12110/preview"
-                      target="_blank">立即购买</a>
                   </div>
                 </div>
               </div>
@@ -137,10 +133,6 @@
                       class="btn_down"
                       :href="'../goods/'+good.goodsId"
                       target="_blank">详情</a>
-                    <a
-                      class="btn_preview"
-                      href="/item/12110/preview"
-                      target="_blank">立即购买</a>
                   </div>
                 </div>
               </div>
@@ -155,7 +147,23 @@
 
 
         <el-dialog
-          title="提示"
+          title="发布商品"
+          :visible.sync="dialogVisible"
+          width="30%"
+          :before-close="handleClose">
+          <span>这是一段信息</span>
+          <span slot="footer" class="dialog-footer">
+          <el-button @click="dialogVisible = false">取 消</el-button>
+          <el-button type="primary" @click="insertGoods">确 定</el-button>
+          </span>
+        </el-dialog>
+      </el-tab-pane>
+      <el-tab-pane label="我的提现">
+<!--todo 提现-->
+        <el-button type="primary" style="margin-top: 30px;margin-left: 50px" @click="dialogVisible = true">点击提现
+        </el-button>
+        <el-dialog
+          title="我的提现"
           :visible.sync="dialogVisible"
           width="30%"
           :before-close="handleClose">
@@ -205,6 +213,9 @@ export default {
     this.getOrderList()
   },
   methods: {
+    handleClose(){
+
+    },
     getGoodsList() {
       goodsBySellerId({sellerId: this.loginInfo.userId}).then(response => {
         this.goodsList = response.data.data

@@ -28,8 +28,8 @@
               <span class="c-fff fsize14">卖家： {{ goods.sellerName }}&nbsp;&nbsp;&nbsp;</span>
             </section>
             <section class="c-attr-mt of">
-              <span class="ml10 vam">
-                <em class="icon18 scIcon" v-if="showFav" ></em>
+              <span class="ml10 vam" @click="changeShowFav">
+                <em class="icon18 scIcon" v-if="showFav"></em>
                 <a class="c-fff vam" title="收藏" href="#" v-if="showFav">收藏</a>
                 <em class="icon18 scIcon1" v-if="!showFav"></em>
                 <a class="c-fff vam" title="已收藏" href="#" v-if="!showFav">已收藏</a>
@@ -164,8 +164,9 @@
 
 <script>
 import {findById} from '@/api/goods'
-import {queryFav} from "@/api/fav";
+import {addFav, queryFav} from "@/api/fav";
 import cookie from "js-cookie";
+import {createOrders} from "@/api/order";
 
 export default {
   data() {
@@ -183,8 +184,9 @@ export default {
       })
       this.showInfo()
       if (this.loginInfo) {
-        queryFav({goodsId: this.$route.params.id, userId: this.loginInfo.userId}).then(res=>{
-          if (res.data.msg == 'ok'){
+        //查询收藏
+        queryFav({goodsId: this.$route.params.id, userId: this.loginInfo.userId}).then(res => {
+          if (res.data.msg == 'ok') {
             this.showFav = false
           }
         })
@@ -192,7 +194,15 @@ export default {
     }
   },
   methods: {
-
+    changeShowFav() {
+      this.showFav = !this.showFav
+      if(!this.showFav){
+        addFav({goodsId: this.goods.goodsId, userId: this.loginInfo.userId})
+      }
+      if(this.showFav){
+        remo
+      }
+    },
 
     showInfo() {
       let jsonStr = cookie.get('loginUser')
@@ -202,12 +212,13 @@ export default {
     },
     //生成订单
     createOrders() {
-      // ordersApi.createOrders(this.courseId)
-      //  .then(response => {
-      //    //获取返回订单号
-      //    //生成订单之后，跳转订单显示页面
-      //    this.$router.push({path:'/orders/'+response.data.data.orderId})
-      //  })
+      createOrders({goodsId: this.goods.goodsId, userId: this.loginInfo.userId})
+        .then(response => {
+          //获取返回订单号
+          //生成订单之后，跳转订单显示页面
+          console.log(response.data.msg)
+          this.$router.push({path: '/order/' + response.data.msg})
+        })
     }
   }
 }

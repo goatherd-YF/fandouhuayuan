@@ -101,6 +101,7 @@ export default {
   layout: 'sign',
   data() {
     return {
+
       user: { // 封装注册输入数据
         code: '', // 验证码
         userName: '',
