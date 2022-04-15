@@ -47,10 +47,11 @@
                       class="btn_down"
                       :href="'../goods/'+good.goodsId"
                       target="_blank">详情</a>
-                    <a
+                    <div
                       class="btn_preview"
-                      href="/item/12110/preview"
-                      target="_blank">立即购买</a>
+                      @click="removeCart(good)"
+                      target="_blank">删除
+                    </div>
                   </div>
                 </div>
               </div>
@@ -151,30 +152,68 @@
           :visible.sync="dialogVisible"
           width="30%"
           :before-close="handleClose">
-          <span>这是一段信息</span>
-          <span slot="footer" class="dialog-footer">
-          <el-button @click="dialogVisible = false">取 消</el-button>
-          <el-button type="primary" @click="insertGoods">确 定</el-button>
-          </span>
-        </el-dialog>
-      </el-tab-pane>
-      <el-tab-pane label="我的提现">
-<!--todo 提现-->
-        <el-button type="primary" style="margin-top: 30px;margin-left: 50px" @click="dialogVisible = true">点击提现
-        </el-button>
-        <el-dialog
-          title="我的提现"
-          :visible.sync="dialogVisible"
-          width="30%"
-          :before-close="handleClose">
-          <span>这是一段信息</span>
-          <span slot="footer" class="dialog-footer">
-          <el-button @click="dialogVisible = false">取 消</el-button>
-          <el-button type="primary" @click="insertGoods">确 定</el-button>
-          </span>
-        </el-dialog>
 
+          <div class="app-container">
+            <el-form label-width="auto" :rules="rules" :model="goodsForm" :ref="goodsForm">
+              <el-form-item label="商品名称">
+                <el-input v-model="goodsForm.goodsName" maxlength="10" show-word-limit/>
+              </el-form-item>
+              <el-form-item
+                label="商品价格"
+                prop="goodsPrice">
+                <el-input v-model.number="goodsForm.goodsPrice"/>
+              </el-form-item>
+
+              <el-form-item label="卖家名称">
+                <el-select v-model="goodsForm.sellerId" clearable placeholder="请选择卖家名称">
+                  <el-option
+                    v-for="item in users"
+                    :key="item.userId"
+                    :label="item.userName"
+                    :value="item.userId">
+                  </el-option>
+                </el-select>
+              </el-form-item>
+
+              <el-form-item label="商品类别">
+                <el-select v-model="goodsForm.categoryId" clearable placeholder="请选择">
+                  <el-option
+                    v-for="item in categorys"
+                    :key="item.categoryId"
+                    :label="item.categoryName"
+                    :value="item.categoryId">
+                  </el-option>
+                </el-select>
+              </el-form-item>
+              <!--     图片上传-->
+              <el-form-item label="商品图片">
+                <el-upload
+                  class="upload-demo"
+                  action="http://localhost:9528/dev-api/oss/fileOss"
+                  :on-preview="handlePreview"
+                  :on-remove="handleRemove"
+                  :before-remove="beforeRemove"
+                  :on-success="successUpload"
+                  :on-change="changeUpload"
+                  :file-list="fileList"
+                  :limit="3"
+                  list-type="picture">
+                  <el-button size="small" type="primary">点击上传</el-button>
+                </el-upload>
+              </el-form-item>
+              <el-form-item label="商品描述">
+                <el-input v-model="goodsForm.goodsDescribe" :rows="10" type="textarea" maxlength="200" show-word-limit/>
+              </el-form-item>
+              <el-form-item>
+                <el-button :disabled="saveBtnDisabled" type="primary"
+                           @click="saveOrUpdate(goodsForm)">保存
+                </el-button>
+              </el-form-item>
+            </el-form>
+          </div>
+        </el-dialog>
       </el-tab-pane>
+
     </el-tabs>
   </div>
 </template>
@@ -182,10 +221,12 @@
 import MyMessage from '@/pages/center/myMessage'
 import AboutGoods from '@/pages/center/aboutGoods'
 import cookie from 'js-cookie'
-import {goodsBySellerId} from '@/api/goods'
-import {listByCart} from '@/api/cart'
+import {goodsBySellerId, updateOrSaveGoods} from '@/api/goods'
+import {listByCart, removeCart, removeCartById} from '@/api/cart'
 import {listByOrder} from '@/api/order'
 import Show from "@/components/show";
+import {categoryList} from "@/api/category";
+import {userList} from "@/api/user";
 
 export default {
   name: 'Center',
@@ -196,7 +237,33 @@ export default {
       goodsList: [],
       cartList: [],
       orderList: [],
-      dialogVisible: false
+      dialogVisible: false,
+      fileList: [],
+      categorys: [],
+      goodsForm: {
+        goodsState: true,
+        goodsPicture1: undefined,
+        goodsPicture2: undefined,
+        goodsPicture3: undefined,
+      },
+      saveBtnDisabled: false,//按钮是否禁用
+      categoryList: undefined,
+      users: [],
+      rules: {
+        goodsPrice: [
+          {
+            required: true,
+            message: "价格不能为空",
+            trigger: "blur"
+          },
+          {
+            type: "number",
+            message: "价格必须为数字值",
+            trigger: "blur"
+          }
+        ]
+      }
+
     }
   },
   created() {
@@ -211,10 +278,25 @@ export default {
     this.getCartList()
     // 获取用户订单列表
     this.getOrderList()
+
+    this.showCategoryList();
+
+    //获取用户
+    userList(-1, -1, undefined).then(res => {
+      this.users = res.data.data.rows
+    }).catch(error => console.log("获取用户列表失败"))
   },
   methods: {
-    handleClose(){
-
+    removeCart(item) {
+      removeCart(item.goodsId, this.loginInfo.userId).then(res => {
+        this.$message.success("已移除!")
+        this.cartList = this.cartList.filter(goods => {
+          return goods.goodsId != item.goodsId
+        })
+      })
+    },
+    handleClose() {
+      this.dialogVisible = false
     },
     getGoodsList() {
       goodsBySellerId({sellerId: this.loginInfo.userId}).then(response => {
@@ -223,13 +305,11 @@ export default {
     },
     getCartList() {
       listByCart({userId: this.loginInfo.userId}).then(response => {
-        console.log(response, 'cartList')
         this.cartList = response.data.data
       })
     },
     getOrderList() {
       listByOrder({userId: this.loginInfo.userId}).then(response => {
-        console.log(response, 'orderList')
         this.orderList = response.data.data
       })
     },
@@ -238,16 +318,69 @@ export default {
       var jsonStr = cookie.get('loginUser')
       if (jsonStr) {
         this.loginInfo = JSON.parse(jsonStr)
-        console.log(this.loginInfo, '1209301290')
       }
     },
     //todo 添加商品信息
-    insertGoods(){
-    //  获取相关信息
-    //  发送请求
-    //  返回结果
-    //  关闭弹窗
+    insertGoods() {
+      //  获取相关信息
+      //  发送请求
+      //  返回结果
+      //  关闭弹窗
+    },
+    showCategoryList() {
+      categoryList(-1, -1, undefined).then(
+        response => {
+          this.categorys = response.data.data.rows;
+        }
+      )
+    },
+    saveOrUpdate() {
+      this.saveBtnDisabled = true;//让保存按钮不可多次点击
+      this.dialogVisible = false
+      //将fileList的值转换为picture
+      debugger
+      if (this.fileList[0]) {
+        this.goodsForm.goodsPicture1 = this.fileList[0].url;
+      }
+      if (this.fileList[1]) {
+        this.goodsForm.goodsPicture2 = this.fileList[1].url;
+      }
+      if (this.fileList[2]) {
+        this.goodsForm.goodsPicture3 = this.fileList[2].url;
+      }
+      //添加商品信息
+      updateOrSaveGoods(this.goodsForm).then(
+        response => {
+          this.$message({//提示信息
+            type: 'success',
+            message: response.data.msg
+
+          });
+          this.saveBtnDisabled = false;
+          this.$router.push('/goods/goodsList')
+        }
+      )
+    },
+    //  图片上传
+    handleRemove(file, fileList) {
+    },
+    handlePreview(file) {
+      file.name = "Picture"
+    },
+    handleExceed(files, fileList) {
+      this.$message.warning(`当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
+    },
+    beforeRemove(file, fileList) {
+      return this.$confirm(`确定移除 ${file.name}？`);
+    },
+    changeUpload(file) {
+      file.name = "Picture";
+    },
+    successUpload(res, file) {
+      this.fileList.push({name: "Picture", url: res.data.url});
+      0
     }
+
   }
 }
 </script>

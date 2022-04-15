@@ -109,7 +109,7 @@
 <script>
 import {goodsList} from '@/api/goods'
 import {categoryList} from '@/api/category'
-import {listByCart, updateOrSaveCart} from "@/api/cart";
+import {addCart, listByCart, removeCart, removeCartById, updateOrSaveCart} from "@/api/cart";
 import {getLoginInfo} from "@/api/loginInfo";
 import cookie from "js-cookie";
 
@@ -159,33 +159,28 @@ export default {
     this.showInfo()
     // 查询所有商品
     this.getGoods()
+
     // 显示分类
     this.getCategory()
-    this.getCartList()
-    //购物车按钮
-    this.compared()
+    //修改cart状态
+  },
+  mounted() {
+
   },
   methods: {
-    compared() {
-      //此处给goodsList的state赋值 进行过滤
-      this.goodsList = this.goodsList.filter(item => {
-        item.goodsState = '加入购物车'
-        console.log(item.goodsState)
-      })
 
-    },
-    getCartList() {
-      listByCart({userId: this.userId}).then(response => {
-        console.log(response, 'cartList')
-        this.cartList = response.data.data
-      })
-    },
+
     add(item) {
       //为加入购物车才可用
       if (item.goodsState == '加入购物车') {
-        updateOrSaveCart({userId: this.userId, goodsId: item.goodsId, sellerId: item.sellerID}).then(res => {
+        addCart({userId: this.loginInfo.userId, goodsId: item.goodsId, sellerId: item.sellerID}).then(res => {
           this.$message.success("加入成功")
-          item.goodsState = '加入成功'
+          item.goodsState = '已加入'
+        })
+      } else {
+        removeCart(item.goodsId, this.loginInfo.userId).then(res => {
+          this.$message.success("已移除!")
+          item.goodsState = '加入购物车'
         })
       }
     },
@@ -199,8 +194,24 @@ export default {
       this.searchObj = {goodsState: 'true'}
       console.log(this.page, ' this.page')
       goodsList(this.page, this.limit, this.searchObj).then(response => {
-        this.goodsList = response.data.data.rows
-        this.total = response.data.data.total
+        listByCart({userId: this.loginInfo.userId}).then(res => {
+          console.log(response, 'cartList')
+          this.cartList = res.data.data
+          this.total = response.data.data.total
+          this.goodsList = response.data.data.rows
+          this.cartList = res.data.data
+          this.goodsList.forEach(item => {
+            item.goodsState = "加入购物车"
+            if(this.cartList){
+              this.cartList.forEach(cart => {
+                if (item.goodsId == cart.goodsId) {
+                  item.goodsState = '已加入'
+                }
+              })
+            }
+          })
+        })
+
         location.href = '#top'
       })
     },

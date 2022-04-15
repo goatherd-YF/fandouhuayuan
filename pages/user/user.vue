@@ -92,7 +92,6 @@ export default {
         .then(response => {
           // request success
           // response接口返回数据
-          console.log(response, 'getList')
           this.list = response.data.data.rows
           this.total = response.data.data.total
         })

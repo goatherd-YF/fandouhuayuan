@@ -35,11 +35,12 @@
       </el-form>
       <!-- 更多登录方式 -->
       <div class="more-sign">
-        <h6>社交帐号登录</h6>
+        <h6>社交帐号直接登录</h6>
         <ul>
           <li><a
             id="weixin"
             class="weixin"
+            style="margin-left: 40px"
             target="_blank"
             href="http://localhost:8160/api/ucenter/wx/login"><i class="iconfont icon-weixin"/></a>
           </li>

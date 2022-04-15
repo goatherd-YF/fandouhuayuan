@@ -25,6 +25,14 @@ export function removeCartById(id) {
   })
 }
 
+// 根据id删除类别
+export function removeCart(goodsId,userId) {
+  return request({
+    url: `/cart/${goodsId}/${userId}`,
+    method: 'delete'
+  })
+}
+
 // 根据id获取类别
 export function findById(id) {
   return request({
@@ -36,6 +44,14 @@ export function findById(id) {
 export function updateOrSaveCart(cart) {
   return request({
     url: `/cart/saveAndUpdate`,
+    method: 'post',
+    data: cart
+  })
+}
+
+export function addCart(cart) {
+  return request({
+    url: `/cart/add`,
     method: 'post',
     data: cart
   })
