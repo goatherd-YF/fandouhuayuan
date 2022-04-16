@@ -8,10 +8,9 @@ export function pay(id) {
   })
 }
 
-export function payQuery(id) {
+export function payQuery(orderId) {
   return request({
-    url: `/pay/query`,
-    method: 'get',
-    params: id
+    url: `/pay/query/${orderId}`,
+    method: 'get'
   })
 }

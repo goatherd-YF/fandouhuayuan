@@ -16,7 +16,7 @@
         <img src="./QQ图片20220410003719.png" class="pic" alt="">
         <div class="title_info">
           <div class="big_title">[<span style="color: red">商户须知</span>]<span
-            style="padding-left: 10px">请阅读信息</span></div>
+            style="padding-left: 10px">相关信息</span></div>
           <div style="margin-left: 30px;width: 800px;">亲爱的用户，您好！请您遵守用户规范哦1
           </div>
         </div>

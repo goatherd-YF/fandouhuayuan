@@ -1,7 +1,7 @@
 <template>
   <div>
     <img src="./123.png"
-         style="height: 300px;width: 300px;margin-left: 800px; filter: opacity(95%);
+         style="height: 300px;width: 300px;margin-left: 600px; filter: opacity(95%);
          background: center center;
          border-radius: 50%;
          ">
@@ -25,9 +25,11 @@ export default {
   },
   created() {
     console.log(this.$route)
-    let orderId = this.$route.query.out_trade_no
+    console.log(this.$route.query)
+    console.log(this.$route.query.out_trade_no)
+    const orderId = this.$route.query.out_trade_no
     payQuery(orderId).then(res => {
-      console.log("res.data.order")
+      console.log(res.data.data)
       this.order = res.data.data
     })
   }

@@ -76,10 +76,10 @@
                           target="_blank"
                           @click="add(good)">{{ good.goodsState }}
                         </div>
-                        <a
-                          class="btn_preview"
-                          href="/item/12110/preview"
-                          target="_blank">立即购买</a>
+<!--                        <a-->
+<!--                          class="btn_preview"-->
+<!--                          :href="/item/12110/preview"-->
+<!--                          target="_blank">立即购买</a>-->
                       </div>
                     </div>
                   </div>
