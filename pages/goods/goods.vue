@@ -176,7 +176,9 @@ export default {
       console.log('路由变化了')
       console.log('当前页面路由：', to);
       console.log('上一个路由：', from);
-      this.getGoods(1)
+      if (from.query.goodsName != to.query.goodsName) {
+        this.getGoods(1)
+      }
     },
   },
 
@@ -216,16 +218,18 @@ export default {
           this.total = response.data.data.total
           this.goodsList = response.data.data.rows
           this.cartList = res.data.data
-          this.goodsList.forEach(item => {
-            item.goodsState = "加入购物车"
-            if (this.cartList) {
-              this.cartList.forEach(cart => {
-                if (item.goodsId == cart.goodsId) {
-                  item.goodsState = '已加入'
-                }
-              })
-            }
-          })
+          if (this.goodsList) {
+            this.goodsList.forEach(item => {
+              item.goodsState = "加入购物车"
+              if (this.cartList) {
+                this.cartList.forEach(cart => {
+                  if (item.goodsId == cart.goodsId) {
+                    item.goodsState = '已加入'
+                  }
+                })
+              }
+            })
+          }
         })
 
         location.href = '#top'
@@ -251,16 +255,18 @@ export default {
           this.total = response.data.data.total
           this.goodsList = response.data.data.rows
           this.cartList = res.data.data
-          this.goodsList.forEach(item => {
-            item.goodsState = "加入购物车"
-            if (this.cartList) {
-              this.cartList.forEach(cart => {
-                if (item.goodsId == cart.goodsId) {
-                  item.goodsState = '已加入'
-                }
-              })
-            }
-          })
+          if (this.goodsList) {
+            this.goodsList.forEach(item => {
+              item.goodsState = "加入购物车"
+              if (this.cartList) {
+                this.cartList.forEach(cart => {
+                  if (item.goodsId == cart.goodsId) {
+                    item.goodsState = '已加入'
+                  }
+                })
+              }
+            })
+          }
         })
         // 将页面定位到开头
         location.href = '#top'

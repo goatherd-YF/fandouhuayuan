@@ -5,8 +5,11 @@
 
 <script>
 
-export default {
+import cookie from "js-cookie";
+import {pay} from "@/api/pay";
 
+export default {
+  name: 'GoodStr',
   data() {
     return {
       form: {},
@@ -14,11 +17,14 @@ export default {
     }
   },
   created() {
-    if (this.$route.params.id) {
+    if (this.$route.query.str) {
       var jsonStr = cookie.get('loginUser')
       if (jsonStr) {
         this.loginInfo = JSON.parse(jsonStr)
-        pay({goodsId: this.$route.params.id, userId: this.loginInfo.userId})
+        var buyGoodsVo = JSON.parse(this.$route.query.str);
+        buyGoodsVo.userId = this.loginInfo.userId
+        console.log(buyGoodsVo, "buyGoodsVo")
+        pay(buyGoodsVo)
           .then(response => {
             this.form = response.data.data
             const div = document.createElement("div")

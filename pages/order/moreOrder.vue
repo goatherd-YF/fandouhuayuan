@@ -12,6 +12,7 @@
         <tbody>
         <tr>
           <th class="name">商品</th>
+          <th class="name">数量</th>
           <th class="priceNew">价格</th>
         </tr>
         </tbody>
@@ -19,24 +20,30 @@
         <tr>
           <td colspan="3" class="teacher">订单</td>
         </tr>
-        <tr class="good" v-for="order in goodsList" :key="order.goodsId">
+        <tr class="good" v-for="goodsVo in goodsList" :key="goodsVo.goodsId" >
           <td class="name First">
-            <a target="_blank" :href="'http://localhost:3000/goods/'+order.goodsId">
-              <img :src="order.goodsPicture1"></a>
+            <a  :href="'http://localhost:3000/goods/'+goodsVo.goodsId">
+              <img :src="goodsVo.goodsPicture1"></a>
             <div class="goodInfo">
               <input type="hidden" class="ids ids_14502" value="14502">
-              <a target="_blank" :href="'http://localhost:3000/goods/'+ order.goodsId">{{ order.goodsName }}</a>
+              <a  :href="'http://localhost:3000/goods/'+ goodsVo.goodsId">{{ goodsVo.goodsName }}</a>
             </div>
           </td>
+          <td>
+            <p>剩余数量:{{ parseInt(goodsVo.num) - goodsVo.num1 }}</p>
+            <br>
+            <el-input-number v-model="goodsVo.num1 " @change="handleChange" :min="1" :max="parseInt(goodsVo.num) "
+                             label="描述文字"></el-input-number>
+          </td>
           <td class="price">
-            <p>￥<strong>{{ order.goodsPrice }}</strong></p>
+            <p>￥<strong>{{  goodsVo.goodsPrice*goodsVo.num1 }}</strong></p>
             <!-- <span class="discName red">限时8折</span> -->
           </td>
         </tr>
         <tr>
           <td class="Billing tr" colspan="3">
             <div class="tr">
-              <p>共 <strong class="red">{{ goodsList.length }}</strong> 件商品，合计<span
+              <p>共 <strong class="red">{{ num }}</strong> 件商品，合计<span
                 class="red f20">￥<strong>{{ sumPrice }} </strong></span></p>
             </div>
           </td>
@@ -56,7 +63,7 @@
             <!--            <a :href="'/goods/'+order.goodsId">返回商品详情页</a>-->
           </div>
           <div class="fr">
-            <p>共 <strong class="red">1</strong> 件商品，合计<span class="red f20">￥<strong
+            <p>共 <strong class="red">{{ num }}</strong> 件商品，合计<span class="red f20">￥<strong
               id="AllPrice">{{ sumPrice }}</strong></span></p>
           </div>
         </div>
@@ -75,13 +82,14 @@ import cookie from "js-cookie";
 export default {
   data() {
     return {
-      order: {},
+      num: 1,
+      goods: {},
       goodsList: {},
       sumPrice: 0,
       str: undefined,
-      loginInfo:{},
-      form:{},
-      strList:''
+      loginInfo: {},
+      form: {},
+      strList: ''
 
     }
   },
@@ -96,7 +104,7 @@ export default {
         .then(response => {
           console.log(response.data)
           this.goodsList = response.data.data
-
+          this.num = this.goodsList.length
           //计算总价
           this.goodsList.forEach(item => {
             this.sumPrice += parseInt(item.goodsPrice)
@@ -105,6 +113,16 @@ export default {
         })
     }
   },
+  // watch: {
+  //   //监听数组
+  //   goodsList: {
+  //     handler(newVal, oldVal) {
+  //       this.num =1
+  //     },
+  //     deep: true, // 加这个属性，深度监听
+  //   },
+  //
+  // },
 
   methods: {
     // 登录人信息
@@ -113,17 +131,28 @@ export default {
       if (jsonStr) {
         this.loginInfo = JSON.parse(jsonStr)
       }
-    },
+    }
+    ,
     //     //去支付
     toPay() {
 
-      let strList = this.$route.query.myStr
-      this.$router.push({path: '/pay/query',query: {strList}})
-    },
+      var strList = JSON.stringify(this.goodsList);
+      this.$router.push({path: '/pay/query', query: {strList}})
+    }
+    ,
 
     goBack() {
       this.$router.go(-1);
-    }
+    },
+    handleChange(currentValue, oldValue) {
+      //当前数量
+      this.num = this.num - oldValue +currentValue
+      this.sumPrice = 0
+      this.goodsList.forEach(item => {
+        this.sumPrice += parseInt(item.goodsPrice)* item.num1
+      })
+    },
+
   }
 }
 </script>

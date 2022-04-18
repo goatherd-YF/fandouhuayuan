@@ -28,7 +28,9 @@
                 <b class="c-yellow" style="font-size:24px;">￥{{ goods.goodsPrice }}</b>
               </section>
               <section class="c-attr-mt c-attr-undis">
-                <span class="c-fff fsize14">卖家： {{ goods.sellerName }}&nbsp;&nbsp;&nbsp;</span>
+                <span class="c-fff fsize14">卖家： {{ goods.sellerName }}&nbsp;&nbsp;&nbsp;</span>&nbsp;&nbsp;&nbsp;
+                <span class="c-fff fsize14" v-if="goods.num != 0">商品数： {{ goods.num }}&nbsp;&nbsp;&nbsp;</span>
+                <span class="c-fff fsize14" v-if="goods.num == 0">已下架</span>
               </section>
               <section class="c-attr-mt of">
               <span class="ml10 vam" @click="changeShowFav">
@@ -39,7 +41,8 @@
               </span>
               </section>
               <section class="c-attr-mt">
-                <div @click="buyGoods(goods.goodsId)" title="立即购买" class="comm-btn c-btn-3">立即购买</div>
+                <div @click="buyGoods(goods.goodsId)" title="立即购买" class="comm-btn c-btn-3" v-if="goods.num != 0">立即购买</div>
+                <div  title="已下架" class="comm-btn c-btn-3" v-if="goods.num == 0">已下架</div>
               </section>
             </section>
 
@@ -113,14 +116,13 @@ export default {
 
       let jsonStr = cookie.get('loginUser')
       if (jsonStr) {
-        debugger
         this.loginInfo = JSON.parse(jsonStr)
 
         if (this.loginInfo) {
           //查询收藏
-          queryFav({goodsId:this.$route.params.id,userId: this.loginInfo.userId}).then(res => {
+          queryFav({goodsId: this.$route.params.id, userId: this.loginInfo.userId}).then(res => {
             if (res.data.msg == 'ok') {
-                this.showFav= false
+              this.showFav = false
             }
           })
         }

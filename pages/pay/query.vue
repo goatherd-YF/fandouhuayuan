@@ -16,14 +16,13 @@ export default {
     }
   },
   created() {
-    debugger
     console.log(this.$route.query.strList)
     if (this.$route.query.strList) {
       let ids1 = JSON.parse(this.$route.query.strList)
       var jsonStr = cookie.get('loginUser')
       if (jsonStr) {
         this.loginInfo = JSON.parse(jsonStr)
-        payIds({ids: ids1, userId: this.loginInfo.userId})
+        payIds({goodsVoList: ids1,userId:this.loginInfo.userId})
           .then(response => {
             if(response.data.msg == 'ok') {
               this.form = response.data.data

@@ -389,7 +389,7 @@ input.iw80 {width: 80px;}
 .vipSide_gray span i {position: absolute;left: 58px;top: -6px;display: inline-block;width: 12px;height: 7px;background: url(/edu/center/images/hidearro.png) no-repeat;}
 .vipSide_gray span b {display: inline-block;font-style: normal;font-weight: normal;font-size: 12px;color: #f60;}
 /*icon*/
-i.icon{background: url(/edu/center/images/icons.png?v=1) no-repeat;}
+/*i.icon{background: url(/edu/center/images/icons.png?v=1) no-repeat;}*/
 a.btn {display: block;background-color: #00baf2;color:#FFF;line-height: 24px;padding:0 10px;}
 a.btn:hover {opacity: 0.8;}
 
@@ -454,7 +454,7 @@ div.Empty {text-align: center;line-height: 40px;color:#666;}
 .exit_slide{ position: fixed; z-index:999; right:40px; top:50%; display:inline-block; line-height: 1;}
 .exit_slide .pre,.exit_slide .after{ height:50px;width:50px; display:inline-block; text-align: center;}
 .exit_slide .after,.exit_slide .cur .pre{ display:none;}
-.exit_slide .cur .after,.exit_slide .pre{ display:block;} 
+.exit_slide .cur .after,.exit_slide .pre{ display:block;}
 
 .exit_slide .customer{ border-radius: 5px; overflow:hidden;cursor: pointer;}
 .exit_slide .customer .pre {

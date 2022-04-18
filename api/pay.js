@@ -1,10 +1,10 @@
 import request from "@/utils/request";
 
-export function pay(ids) {
+export function pay(goodsVo) {
   return request({
     url: `/pay/money`,
     method: 'post',
-    data: ids
+    data: goodsVo
   })
 }
 

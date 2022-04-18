@@ -12,7 +12,7 @@
         <tbody>
         <tr>
           <th class="name">商品</th>
-          <!--          <th class="price">原价</th>-->
+          <th class="price">购买数量</th>
           <th class="priceNew">价格</th>
         </tr>
         </tbody>
@@ -23,15 +23,21 @@
         </tr>
         <tr class="good">
           <td class="name First">
-            <a target="_blank" :href="'http://localhost:3000/goods/'+goods.goodsId">
+            <a  :href="'http://localhost:3000/goods/'+goods.goodsId">
               <img :src="goods.goodsPicture1"></a>
             <div class="goodInfo">
               <input type="hidden" class="ids ids_14502" value="14502">
-              <a target="_blank" :href="'http://localhost:3000/goods/'+ goods.goodsId">{{ goods.goodsName }}</a>
+              <a  :href="'http://localhost:3000/goods/'+ goods.goodsId">{{ goods.goodsName }}</a>
             </div>
           </td>
+          <td>
+            <p>剩余数量:{{ parseInt(goods.num)- num }}</p>
+            <br>
+            <el-input-number v-model="num" @change="handleChange" :min="1" :max="parseInt(goods.num) "
+                             label="描述文字"></el-input-number>
+          </td>
           <td class="price">
-            <div>￥<strong>{{ goods.goodsPrice }}</strong></div>
+            <div>￥<strong>{{ goods.goodsPrice*num }}</strong></div>
             <!-- <span class="discName red">限时8折</span> -->
           </td>
           <!--          <td class="red priceNew Last">￥<strong>1111</strong></td>-->
@@ -39,8 +45,8 @@
         <tr>
           <td class="Billing tr" colspan="3">
             <div class="tr">
-              <div>共 <strong class="red">1</strong> 件商品，合计<span
-                class="red f20">￥<strong>{{ goods.goodsPrice }} </strong></span></div>
+              <div>共 <strong class="red">{{ num }}</strong> 件商品，合计<span
+                class="red f20">￥<strong>{{ goods.goodsPrice*num }} </strong></span></div>
             </div>
           </td>
         </tr>
@@ -61,8 +67,8 @@
             <a :href="'/goods/'+goods.goodsId">返回商品详情页</a>
           </div>
           <div class="fr">
-            <div>共 <strong class="red">1</strong> 件商品，合计<span class="red f20">￥<strong
-              id="AllPrice">{{ goods.goodsPrice }}</strong></span></div>
+            <div>共 <strong class="red">{{ num }}</strong> 件商品，合计<span class="red f20">￥<strong
+              id="AllPrice">{{ goods.goodsPrice*num }}</strong></span></div>
           </div>
         </div>
         <input name="score" value="0" type="hidden" id="usedScore">
@@ -90,6 +96,7 @@ export default {
 
   data() {
     return {
+      num: 1,
       goods: {},
       form: {},
       loginInfo: {}
@@ -110,7 +117,11 @@ export default {
     //     //去支付
     toPay() {
       //点击去支付
-      this.$router.push({path: '/pay/' + this.goods.goodsId})
+      this.goods.num = this.num
+      this.goods.goodsPrice = this.num*this.goods.goodsPrice
+      console.log(this.goods)
+      var str = JSON.stringify(this.goods);
+      this.$router.push({path: '/pay/goodStr',query:{str}})
       // var jsonStr = cookie.get('loginUser') //获取登录人
       // if (jsonStr) {
       //   this.loginInfo = JSON.parse(jsonStr)
@@ -133,6 +144,9 @@ export default {
     },
     goBack() {
       this.$router.go(-1);
+    },
+    handleChange(val) {
+      console.log(val)
     }
   }
 }

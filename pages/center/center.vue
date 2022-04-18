@@ -106,11 +106,11 @@
                         <a
                           class="btn_down"
                           :href="'../goods/'+good.goodsId"
-                          target="_blank">详情</a>
+                          >详情</a>
                         <div
                           class="btn_preview"
                           @click="removeCart(good)"
-                          target="_blank">删除
+                          >删除
                         </div>
                       </div>
                     </div>
@@ -129,14 +129,14 @@
             <div class="item-list">
               <div class="item-list tip_empty">
                 <div class="item-box">
-                  <div class="item-box_imageContainer"><a :href="'../goods/'+good.goodsId" target="_blank"><img
+                  <div class="item-box_imageContainer"><a :href="'../goods/'+good.goodsId" ><img
                     :src="good.goodsPicture1"
                     :alt="good.goodsName"
-                    style="height: 200px;width: 250px"
+                    style="height: 250px;width: 250px"
                   ></a>
                   </div>
                   <div class="item-box_content">
-                    <h3><a class="item-box_title" :href="'../goods/'+good.goodsId" target="_blank">{{
+                    <h3><a class="item-box_title" :href="'../goods/'+good.goodsId" >{{
                         good.goodsName
                       }}</a></h3>
                     <div class="intro">
@@ -145,18 +145,27 @@
                   </div>
                   <div class="item-box_footer">
                     <div class="item-box_detailsItem" style="margin-bottom: 7px"><i
-                      class="icon icon-rl sm"/>上传时间：{{ good.createTime.substring(0, 10) }}
+                      class="icon icon-rl sm"/>订单号：{{ good.orderNum }}
                     </div>
-                    <div class="item-box_detailsItem"><i class="icon icon-wenjianbao sm"/>商品价格: ￥{{ good.goodsPrice }}
+                    <div class="item-box_detailsItem" style="margin-bottom: 7px"><i
+                      class="icon icon-rl sm"/>交易数量：{{ good.orderShu }}
+                    </div>
+                    <div class="item-box_detailsItem" style="margin-bottom: 7px"><i
+                      class="icon icon-rl sm"/>交易时间：{{ good.orderTime }}
+                    </div>
+                    <div class="item-box_detailsItem" style="margin-bottom: 7px"><i
+                      class="icon icon-rl sm"/>交易地点：{{ good.orderAddress }}
+                    </div>
+                    <div class="item-box_detailsItem"><i class="icon icon-wenjianbao sm"/>订单价格: ￥{{ good.goodsPrice }}
                     </div>
                     <div class="item-box_footerButtons"><a class="circleButton btn_like" _id="12110"><i
                       class="icon icon-guanzhu big_24"
                       title="点击收藏"/></a></div>
                     <div class="item-box_alignBottom">
                       <a
-                        class="btn_down"
+                        class="btn_preview"
                         :href="'../goods/'+good.goodsId"
-                        target="_blank">详情</a>
+                        >再次购买</a>
                     </div>
                   </div>
                 </div>
@@ -180,7 +189,7 @@
                   ></a>
                   </div>
                   <div class="item-box_content">
-                    <h3><a class="item-box_title" :href="'../goods/'+good.goodsId" target="_blank">{{
+                    <h3><a class="item-box_title" :href="'../goods/'+good.goodsId" >{{
                         good.goodsName
                       }}</a></h3>
                     <div class="intro">
@@ -200,7 +209,15 @@
                       <a
                         class="btn_down"
                         :href="'../goods/'+good.goodsId"
-                        target="_blank">详情</a>
+                        >详情</a>
+                      <a
+                        class="btn_down"
+                        :href="'../goods/'+good.goodsId"
+                        >修改</a>
+                      <a
+                        class="btn_down"
+                        :href="'../goods/'+good.goodsId"
+                       >删除</a>
                     </div>
                   </div>
                 </div>
@@ -454,7 +471,6 @@ export default {
       this.saveBtnDisabled = true;//让保存按钮不可多次点击
       this.dialogVisible = false
       //将fileList的值转换为picture
-      debugger
       if (this.fileList[0]) {
         this.goodsForm.goodsPicture1 = this.fileList[0].url;
       }
@@ -529,7 +545,7 @@ export default {
 
 /*列表*/
 .main {
-  width: 1000px;
+  width: 1100px;
   margin: 0 auto;
   clear: both;
   position: relative;
