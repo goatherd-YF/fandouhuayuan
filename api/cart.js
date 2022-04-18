@@ -26,9 +26,9 @@ export function removeCartById(id) {
 }
 
 // 根据id删除类别
-export function removeCart(goodsId,userId) {
+export function removeCart(cartId) {
   return request({
-    url: `/cart/${goodsId}/${userId}`,
+    url: `/cart/${cartId}`,
     method: 'delete'
   })
 }

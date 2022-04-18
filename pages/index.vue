@@ -82,7 +82,7 @@
                         <i class="c-fff fsize12 f-fA">￥{{ goods.goodsPrice }} </i>
                       </span>
                       <span class="fl jgAttr c-ccc f-fA">
-                        <i class="c-999 f-fA">3收藏</i>
+                        <i class="c-999 f-fA"> 数量：{{ goods.num }}</i>
                         |
                         <i class="c-999 f-fA">{{ goods.sellerName }}</i>
                       </span>

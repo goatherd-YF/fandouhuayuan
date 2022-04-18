@@ -71,9 +71,9 @@
           </div>
           <el-checkbox-group v-model="buyList">
             <div v-for="(good,index) in cartList" :key="good.goodsId" class="main">
-              <el-checkbox :label="good.goodsId"
-                           :true-label="good.goodsId"
-                           :false-label="good.goodsId" @change="addGoodsId"
+              <el-checkbox :label="good.cartId"
+                           :true-label="good.cartId"
+                           :false-label="good.cartId" @change="addGoodsId"
                            style="float: left;margin-top: 100px; margin-right: 50px;" border>选择
               </el-checkbox>
               <div class="item-list">
@@ -397,7 +397,7 @@ export default {
     },
     //删除购物车
     removeCart(item) {
-      removeCart(item.goodsId, this.loginInfo.userId).then(res => {
+      removeCart(item.cartId).then(res => {
         this.$message.success("已移除!")
         this.cartList = this.cartList.filter(goods => {
           this.$message.success("删除成功")
