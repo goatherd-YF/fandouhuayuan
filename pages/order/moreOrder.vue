@@ -80,7 +80,8 @@ export default {
       sumPrice: 0,
       str: undefined,
       loginInfo:{},
-      form:{}
+      form:{},
+      strList:''
 
     }
   },
@@ -115,7 +116,9 @@ export default {
     },
     //     //去支付
     toPay() {
-      this.$router.push({path: '/pay/query',query:{strList: this.$route.query.myStr})
+
+      let strList = this.$route.query.myStr
+      this.$router.push({path: '/pay/query',query: {strList}})
     },
 
     goBack() {

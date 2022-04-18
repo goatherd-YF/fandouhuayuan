@@ -9,7 +9,7 @@
       交易地点：{{ orderAddress  }}<br/>
       交易时间：{{ orderTime }}<br/>
       点击跳转回<a
-        href="./layouts/default.vue" style="color: #00c7e1">首页</a></div>
+        href="/" style="color: #00c7e1">首页</a></div>
   </div>
 </template>
 

@@ -4,9 +4,6 @@
 </template>
 
 <script>
-import {getOrdersInfo} from "@/api/order";
-import {pay} from "@/api/pay";
-import cookie from "js-cookie";
 
 export default {
 
