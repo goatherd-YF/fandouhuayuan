@@ -25,6 +25,22 @@ export function addFav(fav) {
   })
 }
 
+export function removeFav(fav) {
+  return request({
+    url: `/fav/removeFav`,
+    method: 'post',
+    data: fav
+  })
+}
+
+export function listFav(data) {
+  return request({
+    url: `/fav/listFav`,
+    method: 'post',
+    data: data
+  })
+}
+
 export function countFav() {
   return request({
     url: `/fav/count`,

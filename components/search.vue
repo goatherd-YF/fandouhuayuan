@@ -1,112 +1,109 @@
 <template>
-  <div>
-    <div id="aCoursesList" class="bg-fa of">
-      <el-page-header @back="goBack" style="margin-left: 50px;margin-top: 50px">
-      </el-page-header>
-      <section class="container">
-        <header class="comm-title">
-          <h2 class="fl tac">
-            <span class="c-333">全部商品</span>
-          </h2>
-        </header>
-        <!--      类别-->
-        <section class="c-sort-box">
-          <section class="c-s-dl">
-            <dl>
-              <dt>
-                <span class="c-999 fsize14">商品类别</span>
-              </dt>
-              <dd class="c-s-dl-li">
-                <ul class="clearfix">
-                  <li>
-                    <a :class="{active:oneIndex == -1}" title="全部" href="#" @click="getGoods(1)">全部</a>
-                  </li>
-                  <li v-for="(category,index) in categoryList" :key="index" :class="{active:oneIndex==index}">
-                    <a
-                      :title="category.categoryName"
-                      href="#"
-                      @click="getGoodsByCategoryId(category.categoryId , index,1)">{{ category.categoryName }}</a>
-                  </li>
-                </ul>
-              </dd>
-            </dl>
-            <div class="clear"/>
+  <div id="aCoursesList" class="bg-fa of">
+    <section class="container">
+      <header class="comm-title">
+        <h2 class="fl tac">
+          <span class="c-333">全部商品</span>
+        </h2>
+      </header>
+      <!--      类别-->
+      <section class="c-sort-box">
+        <section class="c-s-dl">
+          <dl>
+            <dt>
+              <span class="c-999 fsize14">商品类别</span>
+            </dt>
+            <dd class="c-s-dl-li">
+              <ul class="clearfix">
+                <li>
+                  <a :class="{active:oneIndex == -1}" title="全部" href="#" @click="getGoods(1)">全部</a>
+                </li>
+                <li v-for="(category,index) in categoryList" :key="index" :class="{active:oneIndex==index}">
+                  <a
+                    :title="category.categoryName"
+                    href="#"
+                    @click="getGoodsByCategoryId(category.categoryId , index,1)">{{ category.categoryName }}</a>
+                </li>
+              </ul>
+            </dd>
+          </dl>
+          <div class="clear"/>
+        </section>
+        <div class="mt40">
+          <!-- /无数据提示 开始-->
+          <section v-if="goodsList == null" class="no-data-wrap">
+            <em class="icon30 no-data-ico">&nbsp;</em>
+            <span class="c-666 fsize14 ml10 vam">没有相关数据，小编正在努力整理中...</span>
           </section>
-          <div class="mt40">
-            <!-- /无数据提示 开始-->
-            <section v-if="goodsList == null" class="no-data-wrap">
-              <em class="icon30 no-data-ico">&nbsp;</em>
-              <span class="c-666 fsize14 ml10 vam">没有相关数据，小编正在努力整理中...</span>
-            </section>
-            <!-- /无数据提示 结束-->
-            <article v-if="goodsList != null" class="comm-course-list">
+          <!-- /无数据提示 结束-->
+          <article v-if="goodsList != null" class="comm-course-list">
 
-              <!--列表-->
-              <div v-for="(good) in goodsList" :key="good.goodsId" class="main">
-                <div class="item-list">
-                  <div class="item-list tip_empty">
-                    <div class="item-box">
-                      <div class="item-box_imageContainer"><a :href="'/goods/'+good.goodsId"><img
-                        :src="good.goodsPicture1"
-                        :alt="good.goodsName"
-                        style="height: 200px;width: 300px"
-                        class="cover"
-                        width="300"></a>
+            <!--列表-->
+            <div v-for="(good) in goodsList" :key="good.goodsId" class="main">
+              <div class="item-list">
+                <div class="item-list tip_empty">
+                  <div class="item-box">
+                    <div class="item-box_imageContainer"><a  :href="'/goods/'+good.goodsId" ><img
+                      :src="good.goodsPicture1"
+                      :alt="good.goodsName"
+                      style="height: 200px;width: 300px"
+                      class="cover"
+                      width="300"></a>
+                    </div>
+                    <div class="item-box_content">
+                      <h3><a class="item-box_title"  :href="'/goods/'+good.goodsId" >{{ good.goodsName }}</a></h3>
+                      <div class="intro">
+                        {{ good.goodsDescribe }}
                       </div>
-                      <div class="item-box_content">
-                        <h3><a class="item-box_title" :href="'/goods/'+good.goodsId">{{ good.goodsName }}</a></h3>
-                        <div class="intro">
-                          {{ good.goodsDescribe }}
-                        </div>
+                    </div>
+                    <div class="item-box_footer">
+                      <div class="item-box_detailsItem"><i
+                        class="icon icon-rl sm"/>上传时间：{{ good.createTime.substring(0, 10) }}
                       </div>
-                      <div class="item-box_footer">
-                        <div class="item-box_detailsItem"><i
-                          class="icon icon-rl sm"/>上传时间：{{ good.createTime.substring(0, 10) }}
-                        </div>
-                        <div class="item-box_detailsItem"><i class="icon icon-wenjianbao sm"/>商品价格: ￥{{
-                            good.goodsPrice
-                          }}
-                        </div>
-                        <div class="item-box_footerButtons"><a class="circleButton btn_like" _id="12110"><i
-                          class="icon icon-guanzhu big_24"
-                          title="点击收藏"/></a></div>
-                        <div class="item-box_alignBottom">
-                          <a
-                            :href="'/goods/'+good.goodsId"
-                            class="btn_down"
-                          >详情</a>
-                          <div
-                            class="btn_preview"
-                            href="#"
+                      <div class="item-box_detailsItem"><i class="icon icon-wenjianbao sm"/>商品价格: ￥{{ good.goodsPrice }}
+                      </div>
+                      <div class="item-box_footerButtons"><a class="circleButton btn_like" _id="12110"><i
+                        class="icon icon-guanzhu big_24"
+                        title="点击收藏"/></a></div>
+                      <div class="item-box_alignBottom">
+                        <a
+                          :href="'/goods/'+good.goodsId"
+                          class="btn_down"
+                        >详情</a>
+                        <div
+                          class="btn_preview"
+                          href="#"
 
-                            @click="add(good)">{{ good.goodsState }}
-                          </div>
-
+                          @click="add(good)">{{ good.goodsState }}
                         </div>
+                        <!--                        <a-->
+                        <!--                          class="btn_preview"-->
+                        <!--                          :href="/item/12110/preview"-->
+                        <!--                          target="_blank">立即购买</a>-->
                       </div>
                     </div>
                   </div>
-                  <div class="pagemain"/>
                 </div>
-
-                <div class="clear"/>
+                <div class="pagemain"/>
               </div>
-            </article>
-          </div>
-          <!-- 公共分页 开始 -->
-          <el-pagination
-            :current-page="page"
-            :page-size="limit"
-            :total="total"
-            style="padding: 30px 0; text-align: center;"
-            layout="total, prev, pager, next, jumper"
-            @current-change="pageList"
-          />
-          <!-- 公共分页 结束 -->
-        </section>
+
+              <div class="clear"/>
+            </div>
+          </article>
+        </div>
+        <!-- 公共分页 开始 -->
+        <el-pagination
+          :current-page="page"
+          :page-size="limit"
+          :total="total"
+          style="padding: 30px 0; text-align: center;"
+          layout="total, prev, pager, next, jumper"
+          @current-change="pageList"
+        />
+        <!-- 公共分页 结束 -->
       </section>
-      <!-- /课程列表 结束 -->
-    </div>
+    </section>
+    <!-- /课程列表 结束 -->
   </div>
 </template>
 <script>
@@ -117,9 +114,13 @@ import {getLoginInfo} from "@/api/loginInfo";
 import cookie from "js-cookie";
 
 export default {
+  name:'Search',
+  props:{
+    goodsName: String,
+    required: true
+  },
   data() {
     return {
-      goodsName: '',
       searchObj: {}, // 查询表单对象
       // 类别
       categoryList: [],
@@ -161,26 +162,18 @@ export default {
   },
   created() {
     this.showInfo()
-    // 查询所有商品
-    console.log(this.$route)
-    console.log(this.$route.query)
+    // // 查询所有商品
     this.getGoods()
 
     // 显示分类
     this.getCategory()
     //修改cart状态
   },
+  mounted() {
 
-  watch: {
-    $route(to, from) {
-      console.log('路由变化了')
-      console.log('当前页面路由：', to);
-      console.log('上一个路由：', from);
-      this.getGoods(1)
-    },
   },
-
   methods: {
+
 
     add(item) {
       //为加入购物车才可用
@@ -203,11 +196,7 @@ export default {
       }
       this.oneIndex = -1
       //状态可用的数据
-      if (this.$route.query.goodsName) {
-        this.searchObj = {goodsState: 'true', goodsName: this.$route.query.goodsName}
-      } else {
-        this.searchObj = {goodsState: 'true'}
-      }
+      this.searchObj = {goodsName:this.goodsName, goodsState: 'true'}
       console.log(this.page, ' this.page')
       goodsList(this.page, this.limit, this.searchObj).then(response => {
         listByCart({userId: this.loginInfo.userId}).then(res => {
@@ -218,7 +207,7 @@ export default {
           this.cartList = res.data.data
           this.goodsList.forEach(item => {
             item.goodsState = "加入购物车"
-            if (this.cartList) {
+            if(this.cartList){
               this.cartList.forEach(cart => {
                 if (item.goodsId == cart.goodsId) {
                   item.goodsState = '已加入'
@@ -245,23 +234,8 @@ export default {
       this.oneIndex = index
       this.searchObj.categoryId = id
       goodsList(this.page, this.limit, this.searchObj).then(response => {
-        listByCart({userId: this.loginInfo.userId}).then(res => {
-          console.log(response, 'cartList')
-          this.cartList = res.data.data
-          this.total = response.data.data.total
-          this.goodsList = response.data.data.rows
-          this.cartList = res.data.data
-          this.goodsList.forEach(item => {
-            item.goodsState = "加入购物车"
-            if (this.cartList) {
-              this.cartList.forEach(cart => {
-                if (item.goodsId == cart.goodsId) {
-                  item.goodsState = '已加入'
-                }
-              })
-            }
-          })
-        })
+        this.goodsList = response.data.data.rows
+        this.total = response.data.data.total
         // 将页面定位到开头
         location.href = '#top'
       })
@@ -284,10 +258,6 @@ export default {
         if (!this.loginInfo.userAddress && !this.loginInfo.userEmail) {
         }
       }
-    },
-    goBack() {
-      console.log("11111111")
-      this.$router.go(-1);
     }
   }
 }

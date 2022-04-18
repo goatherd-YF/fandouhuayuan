@@ -1,56 +1,95 @@
 <template>
-  <div class="page12">
-    <div class="systemInfo">
-      <div class="title">
-        <img src="./QQ图片20220410003719.png" class="pic" alt="">
-        <div class="title_info">
-          <div class="big_title">[<span style="color: red"> 系统通知 </span>]<span
-            style="padding-left: 10px">商品交易系统上线啦！</span></div>
-          <div style="margin-left: 30px;width: 800px;">翻斗花园跳蚤市场线上交易系统上线啦！
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="systemInfo">
-      <div class="title">
-        <img src="./QQ图片20220410003719.png" class="pic" alt="">
-        <div class="title_info">
-          <div class="big_title">[<span style="color: red">商户须知</span>]<span
-            style="padding-left: 10px">相关信息</span></div>
-          <div style="margin-left: 30px;width: 800px;">亲爱的用户，您好！请您遵守用户规范哦1
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="systemInfo">
-      <div class="title">
-        <img src="./QQ图片20220410003719.png" class="pic" alt="">
-        <div class="title_info">
-          <div class="big_title">[<span style="color: red">订单交易</span>]<span
-            style="padding-left: 10px">交易须知</span></div>
-          <div style="margin-left: 30px;width: 800px;">尊敬的各位用户，请您要遵守规范，明确交易时间和地点，有问题及时联系管理员！联系方式：1886666666
-          </div>
-        </div>
-      </div>
-    </div>
+  <div>
+    <el-page-header @back="goBack" style="margin-left: 50px;margin-top: 25">
+    </el-page-header>
+    <div class="mt40">
+      <!-- /无数据提示 开始-->
+      <section v-if="msgList == null" class="no-data-wrap">
+        <em class="icon30 no-data-ico">&nbsp;</em>
+        <span class="c-666 fsize14 ml10 vam">没有相关数据，小编正在努力整理中...</span>
+      </section>
+      <!-- /无数据提示 结束-->
+      <article v-if="msgList != null" class="comm-course-list">
 
+        <!--列表-->
+        <div v-for="myMsg in msgList" :key="myMsg.messageId" class="main">
+          <a :title=" myMsg.myType" :href="'/sysMessage/'+myMsg.messageId">
+            <div class="systemInfo">
+              <div class="title">
+                <img src="./QQ图片20220410003719.png" class="pic" alt="">
+                <div class="title_info">
+                  <div class="big_title">[<span style="color: red"> {{ myMsg.myType }} </span>]<span
+                    style="padding-left: 10px">{{ myMsg.messageTopical }}</span></div>
+                  <div style="margin-left: 30px;width: 800px; height:px;ext-overflow: ellipsis;
+              overflow: hidden;">{{ myMsg.messageContent }}！
+                  </div>
+                </div>
+              </div>
+            </div>
+          </a>
+        </div>
+      </article>
+      <!-- 公共分页 开始 -->
+      <el-pagination
+        :current-page="page"
+        :page-size="limit"
+        :total="total"
+        style="padding: 30px 0; text-align: center;"
+        layout="total, prev, pager, next, jumper"
+        @current-change="pageList"
+      />
+      <!-- 公共分页 结束 -->
+    </div>
   </div>
 </template>
 
 <script>
+import {sysMessageList} from "@/api/sysMessage";
+
 export default {
   name: 'SysMessage',
   data() {
-    return {}
+    return {
+      msgList: [],
+      page: 1, // 页数
+      limit: 8, // 数据量
+      total: 0, // 总记录数
+
+    }
+  },
+  created() {
+    this.getMsgList()
+  },
+  methods: {
+    getMsgList() {
+      sysMessageList(this.page, this.limit, {}).then(res => {
+        this.msgList = res.data.data.rows
+        this.total = res.data.data.total
+      })
+    },
+    pageList(val) {
+      console.log(val)
+      this.page = val
+      console.log(this.page, ' this.page')
+      sysMessageList(this.page, this.limit, {}).then(res => {
+        this.msgList = res.data.data.rows
+        this.total = res.data.data.total
+      })
+    },
+    goBack() {
+      console.log("11111111")
+      this.$router.go(-1);
+    }
   }
 }
 </script>
 
 <style scoped>
-.page12{
+.page12 {
   width: 100%;
   height: 80%;
 }
+
 .systemInfo {
   width: 100%;
   height: 100px;

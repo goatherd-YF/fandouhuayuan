@@ -41,10 +41,9 @@
             id="weixin"
             class="weixin"
             style="margin-left: 40px"
-            target="_blank"
             href="http://localhost:8160/api/ucenter/wx/login"><i class="iconfont icon-weixin"/></a>
           </li>
-          <!--          <li><a id="qq" class="qq" target="_blank" href="#"><i class="iconfont icon-qq"/></a></li>-->
+          <!--          <li><a id="qq" class="qq"  href="#"><i class="iconfont icon-qq"/></a></li>-->
         </ul>
       </div>
     </div>

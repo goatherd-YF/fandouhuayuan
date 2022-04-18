@@ -73,18 +73,18 @@
         <p class="sign-up-msg">
           点击 “注册” 即表示您同意并愿意遵守翻斗花园的规定
           <br>
-          <a target="_blank" href="https://www.nuist.edu.cn">用户协议</a>
+          <a  href="https://www.nuist.edu.cn">用户协议</a>
           和
-          <a target="_blank" href="https://www.nuist.edu.cn/">隐私政策</a> 。
+          <a  href="https://www.nuist.edu.cn/">隐私政策</a> 。
         </p>
       </el-form>
       <!-- 更多注册方式 -->
 <!--      <div class="more-sign">-->
 <!--        <h6>社交帐号直接注册</h6>-->
 <!--        <ul>-->
-<!--          <li><a id="weixin" class="weixin" target="_blank" href="http://huaan.free.idcfengye.com/api/ucenter/wx/login"><i-->
+<!--          <li><a id="weixin" class="weixin"  href="http://huaan.free.idcfengye.com/api/ucenter/wx/login"><i-->
 <!--            class="iconfont icon-weixin"/></a></li>-->
-<!--          <li><a id="qq" class="qq" target="_blank" href="#"><i class="iconfont icon-qq"/></a></li>-->
+<!--          <li><a id="qq" class="qq" href="#"><i class="iconfont icon-qq"/></a></li>-->
 <!--        </ul>-->
 <!--      </div>-->
     </div>

@@ -1,5 +1,7 @@
 <template>
   <div id="aCoursesList" class="bg-fa of">
+    <el-page-header @back="goBack"  style="margin-left: 50px;margin-top: 50px">
+    </el-page-header>
     <!-- 讲师列表 开始 -->
     <section class="container">
       <header class="comm-title all-teacher-title">
@@ -29,7 +31,7 @@
               <li v-for="user in list" :key="user.userId">
                 <section class="i-teach-wrap">
                   <div class="i-teach-pic">
-                    <a :title="user.userName" :href="'/user/'+user.userId" target="_blank">
+                    <a :title="user.userName" :href="'/user/'+user.userId" >
                       <img :src="user.avatar" :alt="user.userName">
                     </a>
                   </div>
@@ -37,7 +39,6 @@
                     <a
                       :title="user.userName"
                       :href="'/user/'+user.userId"
-                      target="_blank"
                       class="fsize18 c-666">{{ user.userName }}</a>
                   </div>
                   <div class="hLh30 txtOf tac">
@@ -101,7 +102,11 @@ export default {
             console.log(error)
           }
         )
+    },
+    goBack(){
+      this.$router.go(-1);
     }
-  }
+
+}
 }
 </script>

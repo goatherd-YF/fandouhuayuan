@@ -1,5 +1,7 @@
 <template>
   <div class="Page Confirm">
+    <el-page-header @back="goBack" style="margin-left: 50px;margin-top: 50px">
+    </el-page-header>
     <div class="Title">
       <h1 class="fl f18">订单确认</h1>
       <img src="~/assets/img/cart_setp2.png" class="fr">
@@ -15,23 +17,21 @@
         </tr>
         </tbody>
         <tbody>
-        <!-- <tr>
-          <td colspan="3" class="Title red f18 fb"><p>限时折扣</p></td>
-        </tr> -->
+
         <tr>
-          <td colspan="3" class="teacher">商户：{{ order.userName }}</td>
+          <td colspan="3" class="teacher">商户：{{ goods.userName }}</td>
         </tr>
         <tr class="good">
           <td class="name First">
-            <a target="_blank" :href="'https://localhost:3000/goods/'+order.goodsId">
-              <img :src="order.goodsPicture1"></a>
+            <a target="_blank" :href="'http://localhost:3000/goods/'+goods.goodsId">
+              <img :src="goods.goodsPicture1"></a>
             <div class="goodInfo">
               <input type="hidden" class="ids ids_14502" value="14502">
-              <a target="_blank" :href="'https://localhost:3000/gooodsId/'+ order.goodsId">{{ order.goodsName }}</a>
+              <a target="_blank" :href="'http://localhost:3000/goods/'+ goods.goodsId">{{ goods.goodsName }}</a>
             </div>
           </td>
           <td class="price">
-            <p>￥<strong>{{ order.orderPrice }}</strong></p>
+            <div>￥<strong>{{ goods.goodsPrice }}</strong></div>
             <!-- <span class="discName red">限时8折</span> -->
           </td>
           <!--          <td class="red priceNew Last">￥<strong>1111</strong></td>-->
@@ -39,8 +39,8 @@
         <tr>
           <td class="Billing tr" colspan="3">
             <div class="tr">
-              <p>共 <strong class="red">1</strong> 件商品，合计<span
-                class="red f20">￥<strong>{{ order.orderPrice }} </strong></span></p>
+              <div>共 <strong class="red">1</strong> 件商品，合计<span
+                class="red f20">￥<strong>{{ goods.goodsPrice }} </strong></span></div>
             </div>
           </td>
         </tr>
@@ -49,18 +49,20 @@
       <div class="Finish">
         <div class="fr" id="AgreeDiv">
 
-          <label><p class="on"><input type="checkbox" checked="checked">我已阅读并同意<a href="javascript:"
-                                                                                  target="_blank">《翻斗花园购买协议》</a>
-          </p></label>
+          <label>
+            <div class="on"><input type="checkbox" checked="checked">我已阅读并同意<a href="javascript:"
+                                                                               target="_blank">《翻斗花园购买协议》</a>
+            </div>
+          </label>
         </div>
         <div class="clear"></div>
         <div class="Main fl">
           <div class="fl">
-            <a :href="'/goods/'+order.goodsId">返回商品详情页</a>
+            <a :href="'/goods/'+goods.goodsId">返回商品详情页</a>
           </div>
           <div class="fr">
-            <p>共 <strong class="red">1</strong> 件商品，合计<span class="red f20">￥<strong
-              id="AllPrice">{{ order.orderPrice }}</strong></span></p>
+            <div>共 <strong class="red">1</strong> 件商品，合计<span class="red f20">￥<strong
+              id="AllPrice">{{ goods.goodsPrice }}</strong></span></div>
           </div>
         </div>
         <input name="score" value="0" type="hidden" id="usedScore">
@@ -72,29 +74,65 @@
 </template>
 <script>
 import {getOrdersInfo} from '@/api/order'
+import {findById} from "@/api/goods";
+import cookie from "js-cookie";
+import {pay} from "@/api/pay";
 
 export default {
+  asyncData({params, error}) {
+    return findById(params.oid)
+      .then(response => {
+        return {
+          goods: response.data.data
+        }
+      })
+  },
+
   data() {
     return {
-      order: {},
-
-    }
-  },
-  created() {
-    if (this.$route.params.oid) {
-      getOrdersInfo(this.$route.params.oid)
-        .then(response => {
-          console.log(response.data)
-          this.order = response.data.data
-          console.log(this.order, "”1111111111")
-        })
+      goods: {},
+      form: {},
+      loginInfo: {}
     }
   },
 
   methods: {
+    getGoods() {
+      if (this.$route.params.oid) {
+        findById(this.$route.params.oid)
+          .then(response => {
+            console.log(response.data)
+            this.goods = response.data.data
+            console.log(this.goods, "”1111111111")
+          })
+      }
+    },
     //     //去支付
     toPay() {
-      this.$router.push({path: '/pay/' + this.order.orderId})
+      //点击去支付
+      this.$router.push({path: '/pay/' + this.goods.goodsId})
+      // var jsonStr = cookie.get('loginUser') //获取登录人
+      // if (jsonStr) {
+      //   this.loginInfo = JSON.parse(jsonStr)
+      //   pay({goodsId: this.$route.params.id, userId: this.loginInfo.userId}) //发请求
+      //     .then(response => {
+      //       //返回数据
+      //       console.log(response,"response")
+      //       if (response.data.msg == "error") { //同步数据
+      //         this.$message.error(response.data.data)
+      //       } else {  //成功
+      //         this.form = response.data.data
+      //         const div = document.createElement("div")
+      //         div.innerHTML = this.form
+      //         document.body.appendChild(div)
+      //         document.forms[0].submit();
+      //       }
+      //     })
+      // }
+
+    },
+    goBack() {
+      this.$router.go(-1);
     }
   }
 }

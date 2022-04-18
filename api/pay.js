@@ -1,16 +1,24 @@
 import request from "@/utils/request";
 
-export function pay(id) {
+export function pay(ids) {
   return request({
     url: `/pay/money`,
-    method: 'get',
-    params: id
+    method: 'post',
+    data: ids
   })
 }
 
-export function payQuery(orderId) {
+export function payIds(ids) {
   return request({
-    url: `/pay/query/${orderId}`,
-    method: 'get'
+    url: `/pay/moneyIds`,
+    method: 'post',
+    data: ids
+  })
+}
+
+export function payQuery(orderId,userId) {
+  return request({
+    url: `/pay/query/${orderId}/${userId}`,
+    method: 'post'
   })
 }

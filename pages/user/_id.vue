@@ -1,5 +1,7 @@
 <template>
   <div id="aCoursesList" class="bg-fa of">
+    <el-page-header @back="goBack"  style="margin-left: 50px;margin-top: 50px">
+    </el-page-header>
     <section class="container">
       <header class="comm-title">
         <h2 class="fl tac">
@@ -69,7 +71,7 @@
                       <a
                         :title="goods.goodsName"
                         :href="'/goods/'+goods.goodsId"
-                        target="_blank"
+
                         class="comm-btn c-btn-1">详情</a>
                     </div>
                   </section>
@@ -77,7 +79,7 @@
                     <a
                       :title=" goods.goodsName "
                       href="#"
-                      target="_blank"
+
                       class="course-title fsize18 c-333">{{ goods.goodsDescribe }}</a>
                   </h3>
                 </div>
@@ -129,6 +131,10 @@ export default {
       if (jsonStr) {
         this.loginInfo = JSON.parse(jsonStr)
       }
+    },
+    goBack(){
+      console.log("11111111")
+      this.$router.go(-1);
     }
   }
 }

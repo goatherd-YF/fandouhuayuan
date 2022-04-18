@@ -1,225 +1,293 @@
 <template>
-
   <div>
-    <div style="margin: 10px 10px 10px 50px;font-size: larger">
-      个人中心
-    </div>
-    <el-tabs tab-position="left" style="height:900px;margin-bottom: 30px; margin-left: 50px ;margin-top: 20px">
-      <!--      我的信息完成-->
-      <el-tab-pane label="我的信息">
-        <MyMessage/>
-      </el-tab-pane>
-      <!--      我的购物车-->
-      <el-tab-pane label="我的购物车" class="mypane">
-        <h3 style="margin-top: 30px;margin-left: 50px">我的购物车</h3>
-        <div v-if="goodsList == null">
-          <h3>您的购物车没有物品</h3>
-        </div>
-        <div v-for="(good) in cartList" :key="good.goodsId" class="main">
-          <div class="item-list">
-            <div class="item-list tip_empty">
-              <div class="item-box">
-                <div class="item-box_imageContainer"><a :href="'../goods/'+good.goodsId" target="_blank"><img
-                  :src="good.goodsPicture1"
-                  :alt="good.goodsName"
-                  style="height: 200px;width: 250px"
-                ></a>
-                </div>
-                <div class="item-box_content">
-                  <h3><a class="item-box_title" :href="'../goods/'+good.goodsId" target="_blank">{{
-                      good.goodsName
-                    }}</a></h3>
-                  <div class="intro">
-                    {{ good.goodsDescribe }}
+    <div>
+      <el-page-header @back="goBack" style="margin-left: 50px;margin-top: 25px">
+      </el-page-header>
+      <div style="margin: 0px 10px 10px 200px;font-size: larger">
+        个人中心
+      </div>
+      <el-tabs tab-position="left" style="height:900px;margin-bottom: 30px; margin-left: 200px ;margin-top: 20px">
+        <!--      我的信息完成-->
+        <el-tab-pane label="我的信息">
+          <MyMessage/>
+        </el-tab-pane>
+        <!--      我的收藏-->
+        <el-tab-pane label="我的收藏" class="mypane">
+          <h3 style="margin-top: 30px;margin-left: 50px">我的收藏</h3>
+          <div v-if="favList == null || favList.length == 0">
+            <div style="margin-left: 100px">您的收藏为空</div>
+          </div>
+          <div v-for="(good) in favList" :key="good.goodsId" class="main">
+            <div class="item-list">
+              <div class="item-list tip_empty">
+                <div class="item-box">
+                  <div class="item-box_imageContainer"><a :href="'../goods/'+good.goodsId"><img
+                    :src="good.goodsPicture1"
+                    :alt="good.goodsName"
+                    style="height: 200px;width: 250px"
+                  ></a>
                   </div>
-                </div>
-                <div class="item-box_footer">
-                  <div class="item-box_detailsItem" style="margin-bottom: 7px"><i
-                    class="icon icon-rl sm"/>上传时间：{{ good.createTime.substring(0, 10) }}
+                  <div class="item-box_content">
+                    <h3><a class="item-box_title" :href="'../goods/'+good.goodsId">{{
+                        good.goodsName
+                      }}</a></h3>
+                    <div class="intro">
+                      {{ good.goodsDescribe }}
+                    </div>
                   </div>
-                  <div class="item-box_detailsItem"><i class="icon icon-wenjianbao sm"/>商品价格: ￥{{ good.goodsPrice }}
-                  </div>
-                  <div class="item-box_footerButtons"><a class="circleButton btn_like" _id="12110"><i
-                    class="icon icon-guanzhu big_24"
-                    title="点击收藏"/></a></div>
-                  <div class="item-box_alignBottom">
-                    <a
-                      class="btn_down"
-                      :href="'../goods/'+good.goodsId"
-                      target="_blank">详情</a>
-                    <div
-                      class="btn_preview"
-                      @click="removeCart(good)"
-                      target="_blank">删除
+                  <div class="item-box_footer">
+                    <div class="item-box_detailsItem" style="margin-bottom: 7px"><i
+                      class="icon icon-rl sm"/>上传时间：{{ good.createTime.substring(0, 10) }}
+                    </div>
+                    <div class="item-box_detailsItem"><i class="icon icon-wenjianbao sm"/>商品价格: ￥{{ good.goodsPrice }}
+                    </div>
+                    <div class="item-box_footerButtons"><a class="circleButton btn_like" _id="12110"><i
+                      class="icon icon-guanzhu big_24"
+                      title="点击收藏"/></a></div>
+                    <div class="item-box_alignBottom">
+                      <a
+                        class="btn_down"
+                        :href="'../goods/'+good.goodsId"
+                      >详情</a>
+                      <div
+                        class="btn_preview"
+                        @click="removeFav(good)"
+                      >删除
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      </el-tab-pane>
-      <el-tab-pane label="我的订单" class="mypane">
-        <h3 style="margin-top: 30px;margin-left: 50px">我的订单</h3>
-        <div v-for="(good) in orderList" :key="good.goodsId" class="main">
-          <div class="item-list">
-            <div class="item-list tip_empty">
-              <div class="item-box">
-                <div class="item-box_imageContainer"><a :href="'../goods/'+good.goodsId" target="_blank"><img
-                  :src="good.goodsPicture1"
-                  :alt="good.goodsName"
-                  style="height: 200px;width: 250px"
-                ></a>
-                </div>
-                <div class="item-box_content">
-                  <h3><a class="item-box_title" :href="'../goods/'+good.goodsId" target="_blank">{{
-                      good.goodsName
-                    }}</a></h3>
-                  <div class="intro">
-                    {{ good.goodsDescribe }}
+        </el-tab-pane>
+        <!--      我的购物车-->
+        <el-tab-pane label="我的购物车" class="mypane">
+          <h3 style="margin-top: 30px;margin-left: 50px">我的购物车</h3>
+          <el-button type="success" @click="buyGoods" style="float: right;margin-right: 100px;margin-bottom: 50px">购买
+          </el-button>
+          <div v-if="cartList == null || cartList.length==0 ">
+            <div style="margin-left: 100px">您的购物车为空</div>
+          </div>
+          <el-checkbox-group v-model="buyList">
+            <div v-for="(good,index) in cartList" :key="good.goodsId" class="main">
+              <el-checkbox :label="good.goodsId"
+                           :true-label="good.goodsId"
+                           :false-label="good.goodsId" @change="addGoodsId"
+                           style="float: left;margin-top: 100px; margin-right: 50px;" border>选择
+              </el-checkbox>
+              <div class="item-list">
+                <div class="item-list tip_empty">
+                  <div class="item-box">
+                    <div class="item-box_imageContainer"><a :href="'../goods/'+good.goodsId"><img
+                      :src="good.goodsPicture1"
+                      :alt="good.goodsName"
+                      style="height: 200px;width: 250px"
+                    ></a>
+                    </div>
+                    <div class="item-box_content">
+                      <h3><a class="item-box_title" :href="'../goods/'+good.goodsId">{{
+                          good.goodsName
+                        }}</a></h3>
+                      <div class="intro">
+                        {{ good.goodsDescribe }}
+                      </div>
+                    </div>
+                    <div class="item-box_footer">
+                      <div class="item-box_detailsItem" style="margin-bottom: 7px"><i
+                        class="icon icon-rl sm"/>上传时间：{{ good.createTime.substring(0, 10) }}
+                      </div>
+                      <div class="item-box_detailsItem"><i class="icon icon-wenjianbao sm"/>商品价格: ￥{{ good.goodsPrice }}
+                      </div>
+                      <div class="item-box_footerButtons"><a class="circleButton btn_like" _id="12110"><i
+                        class="icon icon-guanzhu big_24"
+                        title="点击收藏"/></a></div>
+                      <div class="item-box_alignBottom">
+                        <a
+                          class="btn_down"
+                          :href="'../goods/'+good.goodsId"
+                          target="_blank">详情</a>
+                        <div
+                          class="btn_preview"
+                          @click="removeCart(good)"
+                          target="_blank">删除
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
-                <div class="item-box_footer">
-                  <div class="item-box_detailsItem" style="margin-bottom: 7px"><i
-                    class="icon icon-rl sm"/>上传时间：{{ good.createTime.substring(0, 10) }}
+              </div>
+            </div>
+          </el-checkbox-group>
+        </el-tab-pane>
+        <el-tab-pane label="我的订单" class="mypane">
+          <h3 style="margin-top: 30px;margin-left: 50px">我的订单</h3>
+          <div v-if="orderList == null || orderList.length == 0">
+            <div style="margin-left: 100px">您的订单为空</div>
+          </div>
+          <div v-for="(good) in orderList" :key="good.goodsId" class="main">
+            <div class="item-list">
+              <div class="item-list tip_empty">
+                <div class="item-box">
+                  <div class="item-box_imageContainer"><a :href="'../goods/'+good.goodsId" target="_blank"><img
+                    :src="good.goodsPicture1"
+                    :alt="good.goodsName"
+                    style="height: 200px;width: 250px"
+                  ></a>
                   </div>
-                  <div class="item-box_detailsItem"><i class="icon icon-wenjianbao sm"/>商品价格: ￥{{ good.goodsPrice }}
+                  <div class="item-box_content">
+                    <h3><a class="item-box_title" :href="'../goods/'+good.goodsId" target="_blank">{{
+                        good.goodsName
+                      }}</a></h3>
+                    <div class="intro">
+                      {{ good.goodsDescribe }}
+                    </div>
                   </div>
-                  <div class="item-box_footerButtons"><a class="circleButton btn_like" _id="12110"><i
-                    class="icon icon-guanzhu big_24"
-                    title="点击收藏"/></a></div>
-                  <div class="item-box_alignBottom">
-                    <a
-                      class="btn_down"
-                      :href="'../goods/'+good.goodsId"
-                      target="_blank">详情</a>
+                  <div class="item-box_footer">
+                    <div class="item-box_detailsItem" style="margin-bottom: 7px"><i
+                      class="icon icon-rl sm"/>上传时间：{{ good.createTime.substring(0, 10) }}
+                    </div>
+                    <div class="item-box_detailsItem"><i class="icon icon-wenjianbao sm"/>商品价格: ￥{{ good.goodsPrice }}
+                    </div>
+                    <div class="item-box_footerButtons"><a class="circleButton btn_like" _id="12110"><i
+                      class="icon icon-guanzhu big_24"
+                      title="点击收藏"/></a></div>
+                    <div class="item-box_alignBottom">
+                      <a
+                        class="btn_down"
+                        :href="'../goods/'+good.goodsId"
+                        target="_blank">详情</a>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      </el-tab-pane>
-      <el-tab-pane label="我的商品" class="mypane">
-        <h3 style="margin-top: 30px;margin-left: 50px">我的商品</h3>
-        <div v-for="(good) in goodsList" :key="good.goodsId" class="main">
-          <div class="item-list">
-            <div class="item-list tip_empty">
-              <div class="item-box">
-                <div class="item-box_imageContainer"><a :href="'../goods/'+good.goodsId" target="_blank"><img
-                  :src="good.goodsPicture1"
-                  :alt="good.goodsName"
-                  style="height: 200px;width: 250px"
-                ></a>
-                </div>
-                <div class="item-box_content">
-                  <h3><a class="item-box_title" :href="'../goods/'+good.goodsId" target="_blank">{{
-                      good.goodsName
-                    }}</a></h3>
-                  <div class="intro">
-                    {{ good.goodsDescribe }}
+        </el-tab-pane>
+        <el-tab-pane label="我的商品" class="mypane">
+          <h3 style="margin-top: 30px;margin-left: 50px">我的商品</h3>
+          <div v-if="goodsList== null || goodsList.length == 0">
+            <div style="margin-left: 100px">您还没有商品</div>
+          </div>
+          <div v-for="(good) in goodsList" :key="good.goodsId" class="main">
+            <div class="item-list">
+              <div class="item-list tip_empty">
+                <div class="item-box">
+                  <div class="item-box_imageContainer"><a :href="'../goods/'+good.goodsId" target="_blank"><img
+                    :src="good.goodsPicture1"
+                    :alt="good.goodsName"
+                    style="height: 200px;width: 250px"
+                  ></a>
                   </div>
-                </div>
-                <div class="item-box_footer">
-                  <div class="item-box_detailsItem" style="margin-bottom: 7px"><i
-                    class="icon icon-rl sm"/>上传时间：{{ good.createTime.substring(0, 10) }}
+                  <div class="item-box_content">
+                    <h3><a class="item-box_title" :href="'../goods/'+good.goodsId" target="_blank">{{
+                        good.goodsName
+                      }}</a></h3>
+                    <div class="intro">
+                      {{ good.goodsDescribe }}
+                    </div>
                   </div>
-                  <div class="item-box_detailsItem"><i class="icon icon-wenjianbao sm"/>商品价格: ￥{{ good.goodsPrice }}
-                  </div>
-                  <div class="item-box_footerButtons"><a class="circleButton btn_like" _id="12110"><i
-                    class="icon icon-guanzhu big_24"
-                    title="点击收藏"/></a></div>
-                  <div class="item-box_alignBottom">
-                    <a
-                      class="btn_down"
-                      :href="'../goods/'+good.goodsId"
-                      target="_blank">详情</a>
+                  <div class="item-box_footer">
+                    <div class="item-box_detailsItem" style="margin-bottom: 7px"><i
+                      class="icon icon-rl sm"/>上传时间：{{ good.createTime.substring(0, 10) }}
+                    </div>
+                    <div class="item-box_detailsItem"><i class="icon icon-wenjianbao sm"/>商品价格: ￥{{ good.goodsPrice }}
+                    </div>
+                    <div class="item-box_footerButtons"><a class="circleButton btn_like" _id="12110"><i
+                      class="icon icon-guanzhu big_24"
+                      title="点击收藏"/></a></div>
+                    <div class="item-box_alignBottom">
+                      <a
+                        class="btn_down"
+                        :href="'../goods/'+good.goodsId"
+                        target="_blank">详情</a>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      </el-tab-pane>
-      <el-tab-pane label="发布商品">
+        </el-tab-pane>
+        <el-tab-pane label="发布商品">
 
-        <el-button type="primary" style="margin-top: 30px;margin-left: 50px" @click="dialogVisible = true">发布商品
-        </el-button>
+          <el-button type="primary" style="margin-top: 30px;margin-left: 50px" @click="dialogVisible = true">发布商品
+          </el-button>
 
 
-        <el-dialog
-          title="发布商品"
-          :visible.sync="dialogVisible"
-          width="30%"
-          :before-close="handleClose">
+          <el-dialog
+            title="发布商品"
+            :visible.sync="dialogVisible"
+            width="30%"
+            :before-close="handleClose">
 
-          <div class="app-container">
-            <el-form label-width="auto" :rules="rules" :model="goodsForm" :ref="goodsForm">
-              <el-form-item label="商品名称">
-                <el-input v-model="goodsForm.goodsName" maxlength="10" show-word-limit/>
-              </el-form-item>
-              <el-form-item
-                label="商品价格"
-                prop="goodsPrice">
-                <el-input v-model.number="goodsForm.goodsPrice"/>
-              </el-form-item>
+            <div class="app-container">
+              <el-form label-width="auto" :rules="rules" :model="goodsForm" :ref="goodsForm">
+                <el-form-item label="商品名称">
+                  <el-input v-model="goodsForm.goodsName" maxlength="10" show-word-limit/>
+                </el-form-item>
+                <el-form-item
+                  label="商品价格"
+                  prop="goodsPrice">
+                  <el-input v-model.number="goodsForm.goodsPrice"/>
+                </el-form-item>
 
-              <el-form-item label="卖家名称">
-                <el-select v-model="goodsForm.sellerId" clearable placeholder="请选择卖家名称">
-                  <el-option
-                    v-for="item in users"
-                    :key="item.userId"
-                    :label="item.userName"
-                    :value="item.userId">
-                  </el-option>
-                </el-select>
-              </el-form-item>
+                <el-form-item label="卖家名称">
+                  <el-select v-model="goodsForm.sellerId" clearable placeholder="请选择卖家名称">
+                    <el-option
+                      v-for="item in users"
+                      :key="item.userId"
+                      :label="item.userName"
+                      :value="item.userId">
+                    </el-option>
+                  </el-select>
+                </el-form-item>
 
-              <el-form-item label="商品类别">
-                <el-select v-model="goodsForm.categoryId" clearable placeholder="请选择">
-                  <el-option
-                    v-for="item in categorys"
-                    :key="item.categoryId"
-                    :label="item.categoryName"
-                    :value="item.categoryId">
-                  </el-option>
-                </el-select>
-              </el-form-item>
-              <!--     图片上传-->
-              <el-form-item label="商品图片">
-                <el-upload
-                  class="upload-demo"
-                  action="http://localhost:9528/dev-api/oss/fileOss"
-                  :on-preview="handlePreview"
-                  :on-remove="handleRemove"
-                  :before-remove="beforeRemove"
-                  :on-success="successUpload"
-                  :on-change="changeUpload"
-                  :file-list="fileList"
-                  :limit="3"
-                  list-type="picture">
-                  <el-button size="small" type="primary">点击上传</el-button>
-                </el-upload>
-              </el-form-item>
-              <el-form-item label="商品描述">
-                <el-input v-model="goodsForm.goodsDescribe" :rows="10" type="textarea" maxlength="200" show-word-limit/>
-              </el-form-item>
-              <el-form-item>
-                <el-button :disabled="saveBtnDisabled" type="primary"
-                           @click="saveOrUpdate(goodsForm)">保存
-                </el-button>
-              </el-form-item>
-            </el-form>
-          </div>
-        </el-dialog>
-      </el-tab-pane>
+                <el-form-item label="商品类别">
+                  <el-select v-model="goodsForm.categoryId" clearable placeholder="请选择">
+                    <el-option
+                      v-for="item in categorys"
+                      :key="item.categoryId"
+                      :label="item.categoryName"
+                      :value="item.categoryId">
+                    </el-option>
+                  </el-select>
+                </el-form-item>
+                <!--     图片上传-->
+                <el-form-item label="商品图片">
+                  <el-upload
+                    class="upload-demo"
+                    action="http://localhost:9528/dev-api/oss/fileOss"
+                    :on-preview="handlePreview"
+                    :on-remove="handleRemove"
+                    :before-remove="beforeRemove"
+                    :on-success="successUpload"
+                    :on-change="changeUpload"
+                    :file-list="fileList"
+                    :limit="3"
+                    list-type="picture">
+                    <el-button size="small" type="primary">点击上传</el-button>
+                  </el-upload>
+                </el-form-item>
+                <el-form-item label="商品描述">
+                  <el-input v-model="goodsForm.goodsDescribe" :rows="10" type="textarea" maxlength="200"
+                            show-word-limit/>
+                </el-form-item>
+                <el-form-item>
+                  <el-button :disabled="saveBtnDisabled" type="primary"
+                             @click="saveOrUpdate(goodsForm)">保存
+                  </el-button>
+                </el-form-item>
+              </el-form>
+            </div>
+          </el-dialog>
+        </el-tab-pane>
 
-    </el-tabs>
+      </el-tabs>
+    </div>
   </div>
 </template>
 <script>
 import MyMessage from '@/pages/center/myMessage'
-import AboutGoods from '@/pages/center/aboutGoods'
 import cookie from 'js-cookie'
 import {goodsBySellerId, updateOrSaveGoods} from '@/api/goods'
 import {listByCart, removeCart, removeCartById} from '@/api/cart'
@@ -227,16 +295,22 @@ import {listByOrder} from '@/api/order'
 import Show from "@/components/show";
 import {categoryList} from "@/api/category";
 import {userList} from "@/api/user";
+import {listFav, removeFav} from "@/api/fav";
 
 export default {
   name: 'Center',
-  components: {Show, AboutGoods, MyMessage},
+  components: {Show, MyMessage},
+
   data() {
     return {
+      checked: false,
+      unchecked: true,
+      buyList: [],
       loginInfo: {},
       goodsList: [],
       cartList: [],
       orderList: [],
+      favList: [],
       dialogVisible: false,
       fileList: [],
       categorys: [],
@@ -278,6 +352,7 @@ export default {
     this.getCartList()
     // 获取用户订单列表
     this.getOrderList()
+    this.getFavList()
 
     this.showCategoryList();
 
@@ -287,10 +362,45 @@ export default {
     }).catch(error => console.log("获取用户列表失败"))
   },
   methods: {
+    addGoodsId(val) {
+      console.log(val, "change")
+      //标记法
+      let flag = 0
+      for (let i = 0; i < this.buyList.length; i++) {
+        if (this.buyList[i] == val) {
+          flag = 1
+          this.buyList.splice(i, 1)
+        }
+      }
+      if (flag == 0) {
+        this.buyList.push(val)
+      }
+      console.log(this.buyList, "this.buyList")
+    },
+    //购买商品
+    buyGoods() {
+      //购买商品
+      //串行传输
+      if (this.buyList.length != 0) {
+        let myStr = JSON.stringify(this.buyList)
+        this.$router.push({path: "/order/moreOrder", query: {myStr}});
+      } else {
+        this.$message.error("请选择商品")
+      }
+    },
+    //删除收藏
+    removeFav(item) {
+      removeFav({goodsId: item.goodsId, userId: this.loginInfo.userId}).then(res => {
+        this.favList = this.favList.filter(good => good.goodsId != item.goodsId)
+        this.$message.success("删除成功")
+      })
+    },
+    //删除购物车
     removeCart(item) {
       removeCart(item.goodsId, this.loginInfo.userId).then(res => {
         this.$message.success("已移除!")
         this.cartList = this.cartList.filter(goods => {
+          this.$message.success("删除成功")
           return goods.goodsId != item.goodsId
         })
       })
@@ -298,6 +408,12 @@ export default {
     handleClose() {
       this.dialogVisible = false
     },
+    getFavList() {
+      listFav({userId: this.loginInfo.userId}).then(response => {
+        this.favList = response.data.data
+      })
+    },
+
     getGoodsList() {
       goodsBySellerId({sellerId: this.loginInfo.userId}).then(response => {
         this.goodsList = response.data.data
@@ -378,7 +494,10 @@ export default {
     },
     successUpload(res, file) {
       this.fileList.push({name: "Picture", url: res.data.url});
-      0
+    },
+    goBack() {
+      console.log("11111111")
+      this.$router.go(-1);
     }
 
   }
@@ -410,7 +529,7 @@ export default {
 
 /*列表*/
 .main {
-  width: 900px;
+  width: 1000px;
   margin: 0 auto;
   clear: both;
   position: relative;

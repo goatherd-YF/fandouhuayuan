@@ -2,7 +2,7 @@
   <div class="in-wrap">
     <!-- 公共头引入 -->
     <header id="header">
-      <section class="container">
+      <section class="container" style="width: 1600px">
         <h1 id="logo">
           <a href="#" title="翻斗花园">
             <img src="~/assets/img/logo.png" width="100%" alt="翻斗花园">
@@ -22,6 +22,9 @@
             <router-link to="/sysMessage/sysMessage" tag="li" active-class="current">
               <a>系统公告</a>
             </router-link>
+            <router-link to="/myCount/myCount" tag="li" active-class="current">
+              <a>排行榜</a>
+            </router-link>
             <router-link to="/center/center" tag="li" active-class="current">
               <a>个人中心</a>
             </router-link>
@@ -38,15 +41,10 @@
                 <span class="vam ml5">注册</span>
               </a>
             </li>
-            <!--            <li v-if="loginInfo.userId" id="is-login-one" class="mr10">-->
-            <!--              <a id="headerMsgCountId" href="#" title="消息">-->
-            <!--                <em class="icon18 news-icon">&nbsp;</em>-->
-            <!--              </a>-->
-            <!--              <q class="red-point" style="display: none">&nbsp;</q>-->
-            <!--            </li>-->
+
             <li v-if="loginInfo.userId" id="is-login-two" class="h-r-user" >
               <!--              <span style="margin: 2px">账户金额:{{ loginInfo.count }}</span>-->
-              <a :href="'/user/'+loginInfo.userId" title>
+              <a :href="'/center/center'" title>
                 <img
                   :src="loginInfo.avatar"
                   width="30"
@@ -61,14 +59,14 @@
             <!-- /未登录显示第1 li；登录后显示第2，3 li -->
           </ul>
           <aside class="h-r-search">
-            <form action="#" method="post">
+<!--            <form action="#" method="post">-->
               <label class="h-r-s-box">
-                <input :value="goods.goodsName" type="text" placeholder="请输入商品" name="queryCourse.courseName" @keyup.enter="searchGoods">
+                <input v-model:value="searchName" type="text" placeholder="请输入商品"  @keyup.enter="searchGoods">
                 <button type="submit" class="s-btn">
                   <em class="icon18">&nbsp;</em>
                 </button>
               </label>
-            </form>
+<!--            </form>-->
           </aside>
         </div>
         <aside class="mw-nav-btn">
@@ -90,7 +88,7 @@
           </h4>
           <ul class="of flink-list">
             <li>
-              <a href="https://github.com/goatherd-YF" title="翻斗花园" target="_blank">翻斗花园</a>
+              <a href="https://github.com/goatherd-YF" title="翻斗花园" >翻斗花园</a>
             </li>
           </ul>
           <div class="clear"/>
@@ -144,10 +142,15 @@ import '~/assets/css/swiper-3.3.1.min.css'
 import "~/assets/css/pages-weixinpay.css"
 import cookie from 'js-cookie'
 import { getUserLoginInfo } from '@/api/login'
+import {goodsList} from "@/api/goods";
+import Search from "@/components/search";
 
 export default {
+  components: {Search},
   data() {
     return {
+      show:false,
+      searchName:undefined,
       token: '',
       goods: {},
       loginInfo: {
@@ -176,7 +179,7 @@ export default {
   },
   methods: {
     searchGoods() {
-      // todo 全局搜索功能
+     this.$router.push('/goods/goods?goodsName='+this.searchName)
     },
     wxLogin() {
       if (this.token === '') return
@@ -192,13 +195,16 @@ export default {
     },
 
     showInfo() {
+      var tokenStr = cookie.get('MyToken')
       var jsonStr = cookie.get('loginUser')
       console.log(typeof jsonStr)
-      if (jsonStr) {
-        this.loginInfo = JSON.parse(jsonStr)
-        if(!this.loginInfo.userAddress && !this.loginInfo.userEmail){
-          this.$router.push("../user/userSave")
+      if (tokenStr) {
+        if(jsonStr) {
+          this.loginInfo = JSON.parse(jsonStr)
         }
+        // if(!this.loginInfo.userAddress && !this.loginInfo.userEmail){
+        //   this.$router.push("../user/userSave")
+        // }
       }else{
         this.$router.push("../login")
       }

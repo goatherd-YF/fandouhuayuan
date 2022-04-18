@@ -1,6 +1,15 @@
 import request from '@/utils/request'
 
-createOrders
+
+
+
+export function getOrdersInfoByIds(ids) {
+  return request({
+    url: `/order/getOrdersInfoByIds`,
+    method: 'post',
+    data: ids
+  })
+}
 
 // 获取类别列表
 export function createOrders(data) {

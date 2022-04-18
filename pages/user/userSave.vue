@@ -1,5 +1,7 @@
 <template>
   <div>
+    <el-page-header @back="goBack"  style="margin-left: 50px;margin-top: 50px">
+    </el-page-header>
     <el-form :model="loginInfo" style="margin: 20px 200px 20px 600px">
       <div style="font-size: 20px;margin: 20px">修改信息</div>
       <el-form-item
@@ -183,6 +185,9 @@ export default {
         return callback(new Error('邮箱格式不正确'))
       }
       return callback()
+    },
+    goBack(){
+      this.$router.go(-1);
     }
   }
 

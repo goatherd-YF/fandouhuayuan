@@ -1,25 +1,54 @@
 <template>
 
   <div>
-    <!-- 幻灯片 开始 -->
-    <div v-swiper:mySwiper="swiperOption">
-      <div class="swiper-wrapper">
-        <div class="swiper-slide" style="background: #ffffff;">
-          <a target="_blank" href="/">
-            <img src="~/assets/photo/banner/331316.jpg" alt="首页banner">
-          </a>
-        </div>
-        <!--        <div class="swiper-slide" style="background: #F3260B;">-->
-        <!--          <a target="_blank" href="/">-->
-        <!--            <img src="~/assets/photo/banner/331316.jpg" alt="首页banner">-->
-        <!--          </a>-->
-        <!--        </div>-->
-      </div>
-      <div class="swiper-pagination swiper-pagination-white"/>
-      <div slot="button-prev" class="swiper-button-prev swiper-button-white"/>
-      <div slot="button-next" class="swiper-button-next swiper-button-white"/>
+    <!--轮播图-->
+    <div class="block">
+      <el-carousel height="500px">
+        <el-carousel-item>
+          <img src="~/assets/photo/banner/125.jpeg" alt="...">
+        </el-carousel-item>
+        <el-carousel-item>
+          <img src="~/assets/photo/banner/156.jpeg" alt="...">
+        </el-carousel-item>
+        <el-carousel-item>
+          <img src="~/assets/photo/banner/124.jpeg" alt="...">
+        </el-carousel-item>
+      </el-carousel>
     </div>
-    <!-- 幻灯片 结束 -->
+    <!--轮播图-->
+    <!--    特价商品-->
+    <div style="margin-bottom: 5%">
+      <div style="margin-left: 15%;margin-right: 15%;font-size: 24px;height: 10%;margin-top: 20px">
+        <span style="font-weight: bold;font-size: 24px;">
+          今日特价
+        </span>
+        <!--        面板-->
+        <el-tabs v-model="activeName" @tab-click="handleClick" style="font-size: 18px">
+          <el-tab-pane label="精选" name="first">
+            <div>
+              <myunit :unitList="filterList"></myunit>
+            </div>
+
+          </el-tab-pane>
+          <el-tab-pane label="美食" name="second">
+            <div>
+              <myunit :unitList="filterList"></myunit>
+            </div>
+          </el-tab-pane>
+          <el-tab-pane label="百货" name="third">
+            <div>
+              <myunit :unitList="filterList"></myunit>
+            </div>
+          </el-tab-pane>
+          <el-tab-pane label="个护" name="fourth">
+            <div>
+              <myunit :unitList="filterList"></myunit>
+            </div>
+          </el-tab-pane>
+        </el-tabs>
+      </div>
+    </div>
+
 
     <div id="aCoursesList">
       <!-- 商品开始 -->
@@ -27,7 +56,7 @@
         <section class="container">
           <header class="comm-title">
             <h2 class="tac">
-              <span class="c-333">推荐商品</span>
+              <span class="c-333">为你推荐</span>
             </h2>
           </header>
           <div>
@@ -75,7 +104,7 @@
         <section class="container">
           <header class="comm-title">
             <h2 class="tac">
-              <span class="c-333">推荐用户</span>
+              <span class="c-333">推荐商户</span>
             </h2>
           </header>
           <div>
@@ -89,7 +118,9 @@
                       </a>
                     </div>
                     <div class="mt10 hLh30 txtOf tac">
-                      <a :title="user.userName" :href="'/user/'+user.userId" class="fsize18 c-666">{{ user.userName }}</a>
+                      <a :title="user.userName" :href="'/user/'+user.userId" class="fsize18 c-666">{{
+                          user.userName
+                        }}</a>
                     </div>
                     <div class="hLh30 txtOf tac">
                       <span class="fsize14 c-999">{{ user.userLevel }}</span>
@@ -99,13 +130,12 @@
                         class="c-999 f-fA"
                       >
                         {{ user.userDescribe }}
-                    </p></div>
+                      </p></div>
                   </section>
                 </li>
               </ul>
               <div class="clear"/>
             </article>
-
           </div>
         </section>
       </div>
@@ -114,23 +144,35 @@
 </template>
 
 <script>
-import { goodsList } from '@/api/goods'
-import { userList } from '@/api/user'
+import {goodsList} from '@/api/goods'
+import {userList} from '@/api/user'
+import Myunit from "@/components/myunit";
+import {getUnit} from "@/api/myindex";
 
 export default {
+  components: {Myunit},
   data() {
     return {
+      activeName: 'first',
+      unitList: [],
+      filterList: [],
       swiperOption: {
-        // 配置分页
+        //配置分页
         pagination: {
-          el: '.swiper-pagination'// 分页的dom节点
+          el: '.swiper-pagination'//分页的dom节点
         },
-        // 配置导航
+        //配置导航
         navigation: {
-          nextEl: '.swiper-button-next', // 下一页dom节点
-          prevEl: '.swiper-button-prev'// 前一页dom节点
+          nextEl: '.swiper-button-next',//下一页dom节点
+          prevEl: '.swiper-button-prev'//前一页dom节点
         }
       },
+      //banner数组
+      bannerList: [
+        './assets/photo/banner/123.jpeg',
+        './assets/photo/banner/124.jpeg',
+        './assets/photo/banner/125.jpeg',
+      ],
       goodsList: [],
       userList: []
 
@@ -139,10 +181,22 @@ export default {
   created() {
     this.getGoodsList()
     this.getUserList()
+    this.getUnit()
   },
   methods: {
+    //获取今日特价
+    getUnit() {
+      getUnit().then(res => {
+        this.unitList = res.data.data
+        this.filterList = this.unitList.filter(item => item.goodsCata == 0)
+      })
+    },
+    handleClick(tab, event) {
+      console.log(tab.index, event,"asdas");
+      this.filterList = this.unitList.filter(item => item.goodsCata == tab.index)
+    },
     getGoodsList() {
-      goodsList(1, 8, { goodsState: 'true'}).then(response => {
+      goodsList(1, 8, {goodsState: 'true'}).then(response => {
         this.goodsList = response.data.data.rows
         console.log(response)
       })
@@ -156,3 +210,20 @@ export default {
   }
 }
 </script>
+<style>
+.el-carousel__item h3 {
+  color: #475669;
+  font-size: 14px;
+  opacity: 0.75;
+  line-height: 150px;
+  margin: 0;
+}
+
+.el-carousel__item:nth-child(2n) {
+  background-color: #99a9bf;
+}
+
+.el-carousel__item:nth-child(2n+1) {
+  background-color: #d3dce6;
+}
+</style>

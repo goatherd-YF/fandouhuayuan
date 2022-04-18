@@ -6,24 +6,30 @@
 <script>
 import {getOrdersInfo} from "@/api/order";
 import {pay} from "@/api/pay";
+import cookie from "js-cookie";
 
 export default {
+
   data() {
     return {
-      form: {}
+      form: {},
+      loginInfo: {}
     }
   },
   created() {
     if (this.$route.params.id) {
-      pay({orderId: this.$route.params.id})
-        .then(response => {
-          this.form = response.data.msg
-          const div  = document.createElement("divPay")
-          div.innerHTML = this.form
-         document.body.appendChild(div)
-          document.forms[1].submit();
-
-        })
+      var jsonStr = cookie.get('loginUser')
+      if (jsonStr) {
+        this.loginInfo = JSON.parse(jsonStr)
+        pay({goodsId: this.$route.params.id, userId: this.loginInfo.userId})
+          .then(response => {
+            this.form = response.data.data
+            const div = document.createElement("div")
+            div.innerHTML = this.form
+            document.body.appendChild(div)
+            document.forms[0].submit();
+          })
+      }
     }
   }
 }
