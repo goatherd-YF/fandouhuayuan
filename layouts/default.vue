@@ -10,24 +10,37 @@
         </h1>
         <div class="h-r-nsl">
           <ul class="nav">
-            <router-link to="/" tag="li" active-class="current" exact>
+            <li>
+            <router-link to="/" tag="li"  active-class="current" exact>
               <a>首页</a>
             </router-link>
-            <router-link to="/goods/goods" tag="li" active-class="current">
+            </li>
+            <li>
+            <router-link to="/goods/goods" tag="li"  active-class="current">
               <a>全部商品</a>
             </router-link>
-            <router-link to="/user/user" tag="li" active-class="current">
+            </li>
+            <li>
+            <router-link to="/user/user" tag="li"  active-class="current">
               <a>商家列表</a>
             </router-link>
+            </li>
+            <li>
             <router-link to="/sysMessage/sysMessage" tag="li" active-class="current">
               <a>系统公告</a>
             </router-link>
-            <router-link to="/myCount/myCount" tag="li" active-class="current">
+            </li>
+            <li>
+            <router-link to="/myCount/myCount" tag="li"  active-class="current">
               <a>排行榜</a>
             </router-link>
+            </li>
+            <li>
             <router-link to="/center/center" tag="li" active-class="current">
               <a>个人中心</a>
             </router-link>
+            </li>
+
           </ul>
           <!-- / nav -->
           <ul class="h-r-login">
@@ -105,7 +118,7 @@
                 <span>Email：624208829@qq.com</span>
               </section>
               <section class="b-f-link mt10">
-                <span>©2022 项目用于毕业设计，题材来源开源资料</span>
+                <span>©2022 翻斗花园跳蚤市场服务校园用户</span>
               </section>
             </section>
           </section>
@@ -197,7 +210,6 @@ export default {
     showInfo() {
       var tokenStr = cookie.get('MyToken')
       var jsonStr = cookie.get('loginUser')
-      console.log(typeof jsonStr)
       if (tokenStr) {
         if(jsonStr) {
           this.loginInfo = JSON.parse(jsonStr)
