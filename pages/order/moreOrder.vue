@@ -30,7 +30,7 @@
             </div>
           </td>
           <td>
-            <p>剩余数量:{{ parseInt(goodsVo.num) - goodsVo.num1 }}</p>
+<!--            <p>剩余数量:{{ parseInt(goodsVo.num) - goodsVo.num1 }}</p>-->
             <br>
             <el-input-number v-model="goodsVo.num1 " @change="handleChange" :min="1" :max="parseInt(goodsVo.num) "
                              label="描述文字"></el-input-number>
@@ -94,22 +94,18 @@ export default {
     }
   },
   created() {
-    console.log(this.$route.query)
-    console.log(this.$route.query.myStr)
     this.showInfo()
 
     if (this.$route.query.myStr) {
       this.str = JSON.parse(this.$route.query.myStr)
       getOrdersInfoByIds({ids: this.str})
         .then(response => {
-          console.log(response.data)
           this.goodsList = response.data.data
           this.num = this.goodsList.length
           //计算总价
           this.goodsList.forEach(item => {
             this.sumPrice += parseInt(item.goodsPrice)
           })
-          console.log(this.sumPrice)
         })
     }
   },

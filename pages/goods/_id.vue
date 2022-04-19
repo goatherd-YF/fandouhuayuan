@@ -15,7 +15,7 @@
         <div>
           <article class="c-v-pic-wrap" style="height: 357px;margin-left: 100px;width: 500px;">
             <section class="p-h-video-box" id="videoPlay">
-              <img height="357px" :src="goods.goodsPicture1" :alt="goods.goodsName" class="dis c-v-pic">
+              <img height="357px" :src="goods.goodsPicture1?goods.goodsPicture1:''" :alt="goods.goodsName" class="dis c-v-pic">
             </section>
           </article>
           <aside class="c-attr-wrap" style=" width: 480px; margin-right: 50px">
@@ -93,8 +93,10 @@ export default {
 
     return findById(params.id)
       .then(response => {
+        console.log(response.data.data)
         return {
           goods: response.data.data
+
         }
       })
   },
@@ -153,18 +155,7 @@ export default {
         this.loginInfo = JSON.parse(jsonStr)
       }
     },
-    // //生成订单
-    // createOrders() {
-    //   createOrders({goodsId: this.goods.goodsId, userId: this.loginInfo.userId})
-    //     .then(response => {
-    //       //获取返回订单号
-    //       //生成订单之后，跳转订单显示页面
-    //       console.log(response.data.msg)
-    //       this.$router.push({path: '/order/' + response.data.msg})
-    //     })
-    // },
     goBack() {
-      console.log("11111111")
       this.$router.go(-1);
     }
   }

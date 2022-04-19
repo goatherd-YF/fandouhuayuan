@@ -12,7 +12,7 @@
           <section class="fl t-infor-box c-desc-content">
             <div class="mt20 ml20">
               <section>
-                <img :src="loginInfo.avatar" class="t-infor-pic">
+                <img :src="loginInfo.avatar" alt="1" class="t-infor-pic">
               </section>
               <section class="mt10">
                 <span class="t-tag-bg">用户名称：{{ loginInfo.userName }}</span>
@@ -20,9 +20,9 @@
               <section class="mt10">
                 <span class="t-tag-bg">用户性别：{{ loginInfo.userSex }}</span>
               </section>
-              <section class="mt10">
-                <span class="t-tag-bg">账户余额：{{ loginInfo.count }}</span>
-              </section>
+<!--              <section class="mt10">-->
+<!--                <span class="t-tag-bg">账户余额：{{ loginInfo.count }}</span>-->
+<!--              </section>-->
               <section class="mt10">
                 <span class="t-tag-bg">用户等级： {{ loginInfo.userLevel }}</span>
               </section>
@@ -33,10 +33,10 @@
                 <p>&nbsp;&nbsp;&nbsp;&nbsp;{{ loginInfo.userDescribe }}</p>
               </section>
               <div class="clear"/>
-              <section v-if="loginInfo.userId " class="mt10" style="float: right;k">
-                <router-link to="/user/userSave/" tag="li" active-class="current">
-                  <el-button type="success">修改信息</el-button>
-                </router-link>
+              <section v-if="loginInfo.userId " class="mt10" style="float: right;">
+
+                  <el-button type="success" @click="handleClick">修改信息</el-button>
+
               </section>
             </div>
           </section>
@@ -54,7 +54,6 @@ export default {
   name: 'MyMessage',
   data() {
     return {
-
       loginInfo: {}
     }
   },
@@ -62,14 +61,16 @@ export default {
     this.showInfo()
   },
   methods: {
+    handleClick(){
+      this.$router.push({path:'/user/userSave'})
+    },
     showInfo() {
-      var jsonStr = cookie.get('loginUser')
+      const jsonStr = cookie.get('loginUser')
       if (jsonStr) {
         this.loginInfo = JSON.parse(jsonStr)
       }
     },
     goBack() {
-      console.log("11111111")
       this.$router.go(-1);
     }
   }

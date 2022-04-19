@@ -93,9 +93,11 @@
               <div class="clear"/>
             </article>
             <section class="tac pt20">
-              <router-link to="/goods/goods" tag="li" active-class="current">
+              <li>
+              <router-link to="/goods/goods"  active-class="current">
                 <a class="comm-btn c-btn-2">全部商品</a>
               </router-link>
+              </li>
             </section>
           </div>
         </section>
@@ -192,19 +194,16 @@ export default {
       })
     },
     handleClick(tab, event) {
-      console.log(tab.index, event,"asdas");
       this.filterList = this.unitList.filter(item => item.goodsCata == tab.index)
     },
     getGoodsList() {
       goodsList(1, 8, {goodsState: 'true'}).then(response => {
         this.goodsList = response.data.data.rows
-        console.log(response)
       })
     },
     getUserList() {
-      userList(1, 8, undefined).then(response => {
+      userList(1, 8, {}).then(response => {
         this.userList = response.data.data.rows
-        console.log(response)
       })
     }
   }

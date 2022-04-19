@@ -16,7 +16,6 @@ export default {
     }
   },
   created() {
-    console.log(this.$route.query.strList)
     if (this.$route.query.strList) {
       let ids1 = JSON.parse(this.$route.query.strList)
       var jsonStr = cookie.get('loginUser')

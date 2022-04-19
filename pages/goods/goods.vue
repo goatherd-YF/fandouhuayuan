@@ -150,8 +150,6 @@ export default {
         goodsDescribe: undefined,
         goodsState: undefined,
         goodsPicture1: undefined,
-        goodsPicture2: undefined,
-        goodsPicture3: undefined,
         createTime: undefined,
         updateTime: undefined
       },
@@ -162,8 +160,6 @@ export default {
   created() {
     this.showInfo()
     // 查询所有商品
-    console.log(this.$route)
-    console.log(this.$route.query)
     this.getGoods()
 
     // 显示分类
@@ -173,9 +169,6 @@ export default {
 
   watch: {
     $route(to, from) {
-      console.log('路由变化了')
-      console.log('当前页面路由：', to);
-      console.log('上一个路由：', from);
       if (from.query.goodsName != to.query.goodsName) {
         this.getGoods(1)
       }
@@ -210,10 +203,8 @@ export default {
       } else {
         this.searchObj = {goodsState: 'true'}
       }
-      console.log(this.page, ' this.page')
       goodsList(this.page, this.limit, this.searchObj).then(response => {
         listByCart({userId: this.loginInfo.userId}).then(res => {
-          console.log(response, 'cartList')
           this.cartList = res.data.data
           this.total = response.data.data.total
           this.goodsList = response.data.data.rows
@@ -250,7 +241,6 @@ export default {
       this.searchObj.categoryId = id
       goodsList(this.page, this.limit, this.searchObj).then(response => {
         listByCart({userId: this.loginInfo.userId}).then(res => {
-          console.log(response, 'cartList')
           this.cartList = res.data.data
           this.total = response.data.data.total
           this.goodsList = response.data.data.rows
@@ -273,9 +263,7 @@ export default {
       })
     },
     pageList(val) {
-      console.log(val)
       this.page = val
-      console.log(this.page, ' this.page')
       if (this.oneIndex === -1) {
         this.getGoods()
       } else {
@@ -284,7 +272,6 @@ export default {
     },
     showInfo() {
       var jsonStr = cookie.get('loginUser')
-      console.log(typeof jsonStr)
       if (jsonStr) {
         this.loginInfo = JSON.parse(jsonStr)
         if (!this.loginInfo.userAddress && !this.loginInfo.userEmail) {
@@ -292,7 +279,6 @@ export default {
       }
     },
     goBack() {
-      console.log("11111111")
       this.$router.go(-1);
     }
   }

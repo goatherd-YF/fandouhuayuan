@@ -45,7 +45,6 @@ export default {
 
   created() {
     if (this.$route.params.id) {
-      console.log(this.$route.params.id, 'id')
       this.findById(this.$route.params.id)
     }
 
@@ -57,7 +56,6 @@ export default {
       })
     },
     goBack() {
-      console.log("11111111")
       this.$router.go(-1);
     }
   }

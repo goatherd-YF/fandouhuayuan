@@ -151,8 +151,6 @@ export default {
         goodsDescribe: undefined,
         goodsState: undefined,
         goodsPicture1: undefined,
-        goodsPicture2: undefined,
-        goodsPicture3: undefined,
         createTime: undefined,
         updateTime: undefined
       },
@@ -197,10 +195,8 @@ export default {
       this.oneIndex = -1
       //状态可用的数据
       this.searchObj = {goodsName:this.goodsName, goodsState: 'true'}
-      console.log(this.page, ' this.page')
       goodsList(this.page, this.limit, this.searchObj).then(response => {
         listByCart({userId: this.loginInfo.userId}).then(res => {
-          console.log(response, 'cartList')
           this.cartList = res.data.data
           this.total = response.data.data.total
           this.goodsList = response.data.data.rows
@@ -241,9 +237,7 @@ export default {
       })
     },
     pageList(val) {
-      console.log(val)
       this.page = val
-      console.log(this.page, ' this.page')
       if (this.oneIndex === -1) {
         this.getGoods()
       } else {
@@ -252,7 +246,6 @@ export default {
     },
     showInfo() {
       var jsonStr = cookie.get('loginUser')
-      console.log(typeof jsonStr)
       if (jsonStr) {
         this.loginInfo = JSON.parse(jsonStr)
         if (!this.loginInfo.userAddress && !this.loginInfo.userEmail) {

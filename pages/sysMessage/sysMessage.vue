@@ -68,16 +68,13 @@ export default {
       })
     },
     pageList(val) {
-      console.log(val)
       this.page = val
-      console.log(this.page, ' this.page')
       sysMessageList(this.page, this.limit, {}).then(res => {
         this.msgList = res.data.data.rows
         this.total = res.data.data.total
       })
     },
     goBack() {
-      console.log("11111111")
       this.$router.go(-1);
     }
   }

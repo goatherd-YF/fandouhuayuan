@@ -23,7 +23,6 @@ export default {
         this.loginInfo = JSON.parse(jsonStr)
         var buyGoodsVo = JSON.parse(this.$route.query.str);
         buyGoodsVo.userId = this.loginInfo.userId
-        console.log(buyGoodsVo, "buyGoodsVo")
         pay(buyGoodsVo)
           .then(response => {
             if(response.data.msg == 'ok') {

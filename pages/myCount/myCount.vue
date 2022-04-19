@@ -2,6 +2,7 @@
   <div>
     <el-page-header @back="goBack" style="margin-left: 50px;margin-top: 25px">
     </el-page-header>
+    <h1 style="text-align: center;font-size: 30px">本月最受欢迎的商品</h1>
     <div style="height: 75%; width: 75%;position: cente;margin-left: 10%">
       <el-table
         style="margin: 30px; align-items: center"
@@ -82,7 +83,6 @@ export default {
       this.$router.push("/goods/" + row.goodsId)
     },
     goBack() {
-      console.log("11111111")
       this.$router.go(-1);
     }
   }

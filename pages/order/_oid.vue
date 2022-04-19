@@ -31,7 +31,7 @@
             </div>
           </td>
           <td>
-            <p>剩余数量:{{ parseInt(goods.num)- num }}</p>
+<!--            <p>剩余数量:{{ parseInt(goods.num)- num }}</p>-->
             <br>
             <el-input-number v-model="num" @change="handleChange" :min="1" :max="parseInt(goods.num) "
                              label="描述文字"></el-input-number>
@@ -108,9 +108,7 @@ export default {
       if (this.$route.params.oid) {
         findById(this.$route.params.oid)
           .then(response => {
-            console.log(response.data)
             this.goods = response.data.data
-            console.log(this.goods, "”1111111111")
           })
       }
     },
@@ -119,33 +117,14 @@ export default {
       //点击去支付
       this.goods.num = this.num
       this.goods.goodsPrice = this.num*this.goods.goodsPrice
-      console.log(this.goods)
       var str = JSON.stringify(this.goods);
       this.$router.push({path: '/pay/goodStr',query:{str}})
-      // var jsonStr = cookie.get('loginUser') //获取登录人
-      // if (jsonStr) {
-      //   this.loginInfo = JSON.parse(jsonStr)
-      //   pay({goodsId: this.$route.params.id, userId: this.loginInfo.userId}) //发请求
-      //     .then(response => {
-      //       //返回数据
-      //       console.log(response,"response")
-      //       if (response.data.msg == "error") { //同步数据
-      //         this.$message.error(response.data.data)
-      //       } else {  //成功
-      //         this.form = response.data.data
-      //         const div = document.createElement("div")
-      //         div.innerHTML = this.form
-      //         document.body.appendChild(div)
-      //         document.forms[0].submit();
-      //       }
-      //     })
-      // }
-
     },
     goBack() {
       this.$router.go(-1);
     },
     handleChange(val) {
+      //数量的变动
       console.log(val)
     }
   }

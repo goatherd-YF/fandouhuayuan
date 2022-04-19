@@ -79,9 +79,7 @@ export default {
         loginUser(this.user).then(response => {
           if (response.data.code === 200) {
             // 把token存在cookie中、也可以放在localStorage中
-            console.log('token', response.data.msg)
             cookie.set('MyToken', response.data.msg, { domain: 'localhost' })
-            console.log(cookie)
             // 登录成功根据token获取用户信息
             getUserLoginInfo().then(response => {
               // 将用户信息记录cookie

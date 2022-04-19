@@ -34,7 +34,7 @@
           class="input-prepend restyle no-radius"
           prop="mobile">
           <div>
-            <el-input v-model="user.mobile" type="text" placeholder="手机号"/>
+            <el-input v-model="user.userPhone" type="text" placeholder="手机号"/>
             <i class="iconfont icon-phone"/>
           </div>
         </el-form-item>
@@ -52,7 +52,7 @@
               :value="codeTest"
               href="javascript:"
               type="button"
-              style="border: none;background-color: none"
+              style="border: none;"
               @click="getCodeFun">{{ codeTest }}</a>
           </div>
         </el-form-item>
@@ -73,20 +73,12 @@
         <p class="sign-up-msg">
           点击 “注册” 即表示您同意并愿意遵守翻斗花园的规定
           <br>
-          <a  href="https://www.nuist.edu.cn">用户协议</a>
+          <a href="https://www.nuist.edu.cn">用户协议</a>
           和
-          <a  href="https://www.nuist.edu.cn/">隐私政策</a> 。
+          <a href="https://www.nuist.edu.cn/">隐私政策</a> 。
         </p>
       </el-form>
-      <!-- 更多注册方式 -->
-<!--      <div class="more-sign">-->
-<!--        <h6>社交帐号直接注册</h6>-->
-<!--        <ul>-->
-<!--          <li><a id="weixin" class="weixin"  href="http://huaan.free.idcfengye.com/api/ucenter/wx/login"><i-->
-<!--            class="iconfont icon-weixin"/></a></li>-->
-<!--          <li><a id="qq" class="qq" href="#"><i class="iconfont icon-qq"/></a></li>-->
-<!--        </ul>-->
-<!--      </div>-->
+
     </div>
   </div>
 </template>
@@ -95,7 +87,7 @@
 import '~/assets/css/sign.css'
 import '~/assets/css/iconfont.css'
 
-import { registerUser, sendMail } from '@/api/register'
+import {registerUser, sendMail} from '@/api/register'
 
 export default {
   layout: 'sign',
@@ -125,15 +117,13 @@ export default {
       if (this.user.userEmail !== '' && this.user.userName !== '' && this.user.userPassword !== '' && this.user.code !== '') {
         registerUser(this.user)
           .then(response => {
-            console.log(response)
             const result = response.data
-            console.log(result)
             if (result.code !== 200) {
               this.$message.error(result.msg)
             } else {
               this.$message.success(result.msg)
               // 跳转登录页面
-              this.$router.push({ path: '/login' })
+              this.$router.push({path: '/login'})
             }
           })
       } else {
@@ -147,7 +137,6 @@ export default {
         if (this.second < 1) {
           clearInterval(result)
           this.sending = true
-          // this.disabled = false;
           this.second = 60
           this.codeTest = '获取验证码'
         }
@@ -155,24 +144,23 @@ export default {
     },
     // 通过输入邮件发送验证码
     getCodeFun() {
-      if(this.user.userEmail){
-        sendMail(this.user.userEmail)
-          .then(response => {
-            console.log(response)
-            const result = response.data
-            console.log(result)
-            if (result.code !== 200) {
-              this.$message.error(result.msg)
-            } else {
-              this.$message.success(result.msg)
-              this.sending = false
-              // 调用倒计时的方法
-              this.timeDown()
-            }
-          })
-      }else {
-        this.$message.error("邮件不能为空")
-      }
+      if (this.sending)
+        if (this.user.userEmail) {
+          sendMail(this.user.userEmail)
+            .then(response => {
+              const result = response.data
+              if (result.code !== 200) {
+                this.$message.error(result.msg)
+              } else {
+                this.$message.success(result.msg)
+                this.sending = false
+                // 调用倒计时的方法
+                this.timeDown()
+              }
+            })
+        } else {
+          this.$message.error("邮件不能为空")
+        }
 
     },
     checkPhone(rule, value, callback) {

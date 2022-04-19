@@ -95,13 +95,10 @@ export default {
           // response接口返回数据
           this.list = response.data.data.rows
           this.total = response.data.data.total
-        })
-        .catch(
-          // request fail
-          error => {
-            console.log(error)
-          }
-        )
+        }).catch(error=>{
+          console.log(error,"user.vue.99")
+      })
+
     },
     goBack(){
       this.$router.go(-1);

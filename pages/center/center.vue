@@ -3,7 +3,7 @@
     <div>
       <el-page-header @back="goBack" style="margin-left: 50px;margin-top: 25px">
       </el-page-header>
-      <div style="margin: 0px 10px 10px 200px;font-size: larger">
+      <div style="margin: 1px 10px 10px 200px;font-size: larger">
         个人中心
       </div>
       <el-tabs tab-position="left" style="height:900px;margin-bottom: 30px; margin-left: 200px ;margin-top: 20px">
@@ -14,7 +14,7 @@
         <!--      我的收藏-->
         <el-tab-pane label="我的收藏" class="mypane">
           <h3 style="margin-top: 30px;margin-left: 50px">我的收藏</h3>
-          <div v-if="favList == null || favList.length == 0">
+          <div v-if="favList == null ">
             <div style="margin-left: 100px">您的收藏为空</div>
           </div>
           <div v-for="(good,index) in favList" :key="index" class="main">
@@ -41,7 +41,7 @@
                     </div>
                     <div class="item-box_detailsItem"><i class="icon icon-wenjianbao sm"/>商品价格: ￥{{ good.goodsPrice }}
                     </div>
-                    <div class="item-box_footerButtons"><a class="circleButton btn_like" _id="12110"><i
+                    <div class="item-box_footerButtons"><a class="circleButton btn_like"><i
                       class="icon icon-guanzhu big_24"
                       title="点击收藏"/></a></div>
                     <div class="item-box_alignBottom">
@@ -67,7 +67,7 @@
           <el-button type="success" @click="buyGoods" style="float: right;margin-right: 100px;margin-bottom: 50px">购买
           </el-button>
           <div style="float: right ;margin-top: 30px;margin-right: 50px">点击选择购买</div>
-          <div v-if="cartList == null || cartList.length==0 ">
+          <div v-if="cartList == null  ">
             <div style="margin-left: 100px">您的购物车为空</div>
           </div>
           <el-checkbox-group v-model="buyList">
@@ -100,7 +100,7 @@
                       </div>
                       <div class="item-box_detailsItem"><i class="icon icon-wenjianbao sm"/>商品价格: ￥{{ good.goodsPrice }}
                       </div>
-                      <div class="item-box_footerButtons"><a class="circleButton btn_like" _id="12110"><i
+                      <div class="item-box_footerButtons"><a class="circleButton btn_like"><i
                         class="icon icon-guanzhu big_24"
                         title="点击收藏"/></a></div>
                       <div class="item-box_alignBottom">
@@ -124,7 +124,7 @@
         <!--      我的购买-->
         <el-tab-pane label="我的购买" class="mypane">
           <h3 style="margin-top: 30px;margin-left: 50px">我的购买</h3>
-          <div v-if="orderList == null || orderList.length == 0">
+          <div v-if="orderList == null ">
             <div style="margin-left: 100px">您没有购买过商品</div>
           </div>
           <div v-for="(good,index) in orderList" :key="index" class="main">
@@ -160,7 +160,7 @@
                     </div>
                     <div class="item-box_detailsItem"><i class="icon icon-wenjianbao sm"/>订单价格: ￥{{ good.goodsPrice }}
                     </div>
-                    <div class="item-box_footerButtons"><a class="circleButton btn_like" _id="12110"><i
+                    <div class="item-box_footerButtons"><a class="circleButton btn_like" ><i
                       class="icon icon-guanzhu big_24"
                       title="点击收藏"/></a></div>
                     <div class="item-box_alignBottom">
@@ -169,7 +169,6 @@
                         :href="'../goods/'+good.goodsId"
                       >再次购买</a>
                       <div @click="twoPay(good.orderNum)"
-                           v-if="good.orderState=='未支付'"
                            class="btn_preview"
                       > {{ good.orderState=='未支付' ?'点击支付 ': good.orderState }}
                       </div>
@@ -181,9 +180,9 @@
           </div>
         </el-tab-pane>
         <!--      我卖的商品  -->
-        <el-tab-pane label="我的售卖">
+        <el-tab-pane label="我的售卖" class="mypane">
           <h3 style="margin-top: 30px;margin-left: 50px">我的售卖</h3>
-          <div v-if="sellerOrderList == null || orderList.length == 0">
+          <div v-if="sellerOrderList == null ">
             <div style="margin-left: 100px">您没有卖出过商品</div>
           </div>
           <div v-for="(good,index) in sellerOrderList" :key="index" class="main">
@@ -219,11 +218,13 @@
                     </div>
                     <div class="item-box_detailsItem"><i class="icon icon-wenjianbao sm"/>订单价格: ￥{{ good.goodsPrice }}
                     </div>
-                    <div class="item-box_footerButtons"><a class="circleButton btn_like" _id="12110"><i
+                    <div class="item-box_footerButtons"><a class="circleButton btn_like" ><i
                       class="icon icon-guanzhu big_24"
                       title="点击收藏"/></a></div>
                     <div class="item-box_alignBottom">
+                      <div v-if="good.orderState == '已支付' ">
                       已交易？点击确认
+                      </div>
                       <div @click="fahuole(index)"
                            class="btn_preview"
                       >{{ good.orderState }}
@@ -237,7 +238,7 @@
         </el-tab-pane>
         <el-tab-pane label="我的商品" class="mypane">
           <h3 style="margin-top: 30px;margin-left: 50px">我的商品</h3>
-          <div v-if="goodsList== null || goodsList.length == 0">
+          <div v-if="goodsList== null ">
             <div style="margin-left: 100px">您还没有商品</div>
           </div>
           <div v-for="(good,index) in goodsList" :key="index" class="main">
@@ -314,18 +315,6 @@
                 <el-input v-model.number="goodsForm.num"/>
               </el-form-item>
 
-
-              <!--              <el-form-item label="卖家名称">-->
-              <!--                <el-select v-model="goodsForm.sellerId" clearable placeholder="请选择卖家名称">-->
-              <!--                  <el-option-->
-              <!--                    v-for="item in users"-->
-              <!--                    :key="item.userId"-->
-              <!--                    :label="item.userName"-->
-              <!--                    :value="item.userId">-->
-              <!--                  </el-option>-->
-              <!--                </el-select>-->
-              <!--              </el-form-item>-->
-
               <el-form-item label="商品类别">
                 <el-select v-model="goodsForm.categoryId" clearable placeholder="请选择">
                   <el-option
@@ -340,7 +329,7 @@
               <el-form-item label="商品图片">
                 <el-upload
                   class="upload-demo"
-                  action="http://localhost:9528/dev-api/oss/fileOss"
+                  action="http://localhost:8160/oss/fileOss"
                   :on-preview="handlePreview"
                   :on-remove="handleRemove"
                   :before-remove="beforeRemove"
@@ -364,7 +353,6 @@
                 <el-button :disabled="saveBtnDisabled" type="primary"
                            @click="saveOrUpdate(goodsForm)">保存
                 </el-button>
-
               </el-form-item>
             </el-form>
           </div>
@@ -377,13 +365,11 @@
 import MyMessage from '@/pages/center/myMessage'
 import cookie from 'js-cookie'
 import {goodsBySellerId, removeGoodsById, updateOrSaveGoods} from '@/api/goods'
-import {listByCart, removeCart, removeCartById} from '@/api/cart'
+import {listByCart, removeCart } from '@/api/cart'
 import {listByOrder, updateFaState} from '@/api/order'
 import Show from "@/components/show";
 import {categoryList} from "@/api/category";
-import {userList} from "@/api/user";
 import {listFav, removeFav} from "@/api/fav";
-import {twoPay} from "@/api/pay";
 
 export default {
   name: 'Center',
@@ -405,13 +391,11 @@ export default {
       categorys: [],
       goodsForm: {
         goodsState: true,
-        goodsPicture1: undefined,
-        goodsPicture2: undefined,
-        goodsPicture3: undefined,
+        goodsPicture1: undefined
       },
       saveBtnDisabled: false,//按钮是否禁用
       categoryList: undefined,
-      users: [],
+      users: {},
       rules: {
         goodsPrice: [
           {
@@ -446,10 +430,7 @@ export default {
 
     this.showCategoryList();
 
-    //获取用户
-    userList(-1, -1, undefined).then(res => {
-      this.users = res.data.data.rows
-    }).catch(error => console.log("获取用户列表失败"))
+
   },
   methods: {
     //未支付再次支付
@@ -458,24 +439,14 @@ export default {
     },
 
     fahuole(index) {
-      id(this.sellerOrderList[index].orderState == "未发货")
-      {
-        this.sellerOrderList[index].orderState = "已发货"
+      if(this.sellerOrderList[index].orderState == "未发货") {
+        this.sellerOrderList[index].orderState = "已交易"
         updateFaState(this.sellerOrderList[index].orderId).then(res => {
           this.$message.success("修改成功")
         })
       }
     },
 
-    shouhuole(index) {
-      id(this.orderList[index].orderState == "已发货")
-      {
-        this.orderList[index].orderState = "已收货"
-        updateFaState(this.sellerOrderList[index].orderId).then(res => {
-          this.$message.success("修改成功")
-        })
-      }
-    },
 
     cancel() {
       this.dialogVisible = false
@@ -484,20 +455,18 @@ export default {
 
     //删除我的商品
     deleteMyGoods(index) {
-      console.log(index, "delete")
-      var id = this.goodsList[index].goodsId
+      debugger
+      const id = this.goodsList[index].goodsId
       removeGoodsById(id).then(res => {
         this.$message.success("删除成功")
       })
     },
     //更新我的商品
     updateMyGoods(index) {
-      console.log(index, "update")
       this.dialogVisible = true
       this.goodsForm = this.goodsList[index]
     },
     addGoodsId(val) {
-      console.log(val, "change")
       //标记法
       let flag = 0
       for (let i = 0; i < this.buyList.length; i++) {
@@ -509,7 +478,6 @@ export default {
       if (flag == 0) {
         this.buyList.push(val)
       }
-      console.log(this.buyList, "this.buyList")
     },
     //购买商品
     buyGoods() {
@@ -525,7 +493,7 @@ export default {
     //删除收藏
     removeFav(item) {
       removeFav({goodsId: item.goodsId, userId: this.loginInfo.userId}).then(res => {
-        this.favList = this.favList.filter(good => good.goodsId != item.goodsId)
+        this.favList = this.favList.filter(goods => goods.goodsId != item.goodsId)
         this.$message.success("删除成功")
       })
     },
@@ -562,12 +530,14 @@ export default {
     getMyBuyOrderList() {
       listByOrder({userId: this.loginInfo.userId}).then(response => {
         this.orderList = response.data.data
+        console.log("//售卖的")
       })
     },
     //我出售的
     getMyOwnOrderList() {
       listByOrder({sellerId: this.loginInfo.userId}).then(response => {
         this.sellerOrderList = response.data.data
+        console.log("//我出售的")
       })
     },
     // 登录人信息
@@ -575,6 +545,7 @@ export default {
       var jsonStr = cookie.get('loginUser')
       if (jsonStr) {
         this.loginInfo = JSON.parse(jsonStr)
+        this.users =this.loginInfo
       }
     },
     //todo 添加商品信息
@@ -585,7 +556,7 @@ export default {
       //  关闭弹窗
     },
     showCategoryList() {
-      categoryList(-1, -1, undefined).then(
+      categoryList(-1, -1, {}).then(
         response => {
           this.categorys = response.data.data.rows;
         }
@@ -595,19 +566,13 @@ export default {
       this.saveBtnDisabled = true;//让保存按钮不可多次点击
       this.dialogVisible = false
       //将fileList的值转换为picture
-
       //添加商品信息
-      updateOrSaveGoods(this.goodsForm).then(
-        response => {
-          this.$message({//提示信息
-            type: 'success',
-            message: response.data.msg
+      this.goodsForm.sellerId = this.loginInfo.userId
 
-          });
-          this.saveBtnDisabled = false;
-
-        }
-      )
+      updateOrSaveGoods(this.goodsForm).then(response => {
+        this.$message.success("上传成功")
+        this.saveBtnDisabled = false;
+        })
       //重新加载页面
       location.reload()
     },
@@ -617,20 +582,17 @@ export default {
     handlePreview(file) {
       file.name = "Picture"
     },
-    handleExceed(files, fileList) {
-      this.$message.warning(`当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
-    },
-    beforeRemove(file, fileList) {
+
+    beforeRemove(file) {
       return this.$confirm(`确定移除 ${file.name}？`);
     },
     changeUpload(file) {
       file.name = "Picture";
     },
-    successUpload(res, file) {
+    successUpload(res) {
       this.goodsForm.goodsPicture1 = res.data.url
     },
     goBack() {
-      console.log("11111111")
       this.$router.go(-1);
     }
 
@@ -649,17 +611,7 @@ export default {
   height: 10px; /*对水平流动条有效*/
 }
 
-.active {
-  background: #bdbdbd;
-}
 
-.hide {
-  display: none;
-}
-
-.show {
-  display: block;
-}
 
 /*列表*/
 .main {
@@ -669,14 +621,12 @@ export default {
   position: relative;
 }
 
-.item-list,
-.item-list2 {
+.item-list  {
   margin-top: 5px;
 }
 
 * {
   word-wrap: break-word;
-  font-family: 微软雅黑;
   font-size: 16px;
   color: #444;
   outline: none;
@@ -701,11 +651,6 @@ div {
   float: left;
 }
 
-.tagList-module {
-  overflow: hidden;
-  width: 300px;
-  height: 19px;
-}
 
 .item-box_content {
   color: #999;
@@ -738,10 +683,6 @@ a {
   text-decoration: none;
 }
 
-.item-box_category {
-  margin-top: 16px;
-  margin-bottom: 16px;
-}
 
 .item-box_content .intro {
   color: #787878;
@@ -780,7 +721,7 @@ a {
 }
 
 .icon {
-  font-family: "iconfont" !important;
+
   font-size: 16px;
   font-style: normal;
   -webkit-font-smoothing: antialiased;
@@ -837,8 +778,7 @@ a {
   color: #666;
 }
 
-.btn_preview,
-.btn_cart {
+.btn_preview  {
   margin-left: 5px;
   position: relative;
   width: 80px;
@@ -858,32 +798,4 @@ a {
   text-decoration: none;
 }
 
-.index_more {
-  text-align: center;
-}
-
-.btn_com.light {
-  background: #dcf6fa;
-  border: 1px solid #00c7e1;
-  color: #00c7e1;
-}
-
-.btn_com {
-  display: inline-block;
-  width: 94px;
-  height: 32px;
-  line-height: 32px;
-  font-size: 14px;
-  color: #fff;
-  border-radius: 3px;
-  cursor: pointer;
-  text-shadow: none;
-  text-decoration: none;
-  text-align: center;
-  font-size: 14px;
-  border-radius: 18px;
-  background-color: #00c7e1;
-  box-shadow: 0 2px 4px 0 rgb(0 188 212 / 28%);
-  border: solid 3px rgba(255, 255, 255, .4);
-}
 </style>

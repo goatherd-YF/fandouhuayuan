@@ -65,13 +65,7 @@
 <!--          maxlength="10"-->
 <!--          show-word-limit/>-->
       </el-form-item>
-      <el-form-item
-        :rules="[{ required: true, message: '请输入邮箱', trigger: 'blur' },{validator: checkEmail, trigger: 'blur'}]"
-        prop="userEmail"
-        label="用户邮箱"
-        style="width: 60%">
-        <el-input v-model="loginInfo.userEmail"/>
-      </el-form-item>
+
       <el-form-item label="用户电话" style="width: 60%">
         <el-input v-model="loginInfo.userPhone" maxlength="11" show-word-limit/>
       </el-form-item>
@@ -133,12 +127,8 @@ export default {
   methods: {
     // 头像上传
     handleAvatarSuccess(res, file) {
-      // this.user.avatar = URL.createObjectURL(file.raw);
-      // console.log(res)
-      // this.imageUrl = URL.createObjectURL(file.raw);
-      // console.log(this.imageUrl)
+
       this.loginInfo.avatar = res.data.url
-      console.log(this.loginInfo.avatar)
     },
 
     beforeAvatarUpload(file) {
@@ -157,26 +147,24 @@ export default {
     saveOrUpdate() {
       this.saveBtnDisabled = true// 让保存按钮不可多次点击
       // 添加类别信息
-      updateOrSaveUser(this.loginInfo).then(
-        response => {
-          console.log(response.msg)
+      updateOrSaveUser(this.loginInfo).then(response => {
           this.$message({// 提示信息
             type: 'success',
             message: response.data.msg
 
           })
           this.saveBtnDisabled = false
-          this.$router.push('/user/' + this.loginInfo.userId)
+        // 更新cookie
+        cookie.set('loginUser', JSON.stringify(this.loginInfo), {domain: 'localhost'})
+        console.log(JSON.parse( cookie.get('loginUser')))
         }
       )
-      // 更新cookie
-      cookie.set('loginUser', JSON.stringify(this.loginInfo), {domain: 'localhost'})
+
     },
     showInfo() {
       var jsonStr = cookie.get('loginUser')
       if (jsonStr) {
         this.loginInfo = JSON.parse(jsonStr)
-        console.log(this.loginInfo, 'loginInfo')
       }
     },
     checkEmail(rule, value, callback) {

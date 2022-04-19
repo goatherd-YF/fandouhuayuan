@@ -33,11 +33,7 @@
               >用户描述：</p>
               <p>&nbsp;&nbsp;&nbsp;&nbsp;{{ user.userDescribe }}</p>
             </section>
-<!--            <section v-if="loginInfo.userId == user.userId" class="mt10" >-->
-<!--              <router-link to="/user/userSave/" tag="li" active-class="current">-->
-<!--                <a>修改信息</a>-->
-<!--              </router-link>-->
-<!--            </section>-->
+
             <div class="clear"/>
           </div>
         </section>
@@ -94,7 +90,7 @@
 </template>
 <script>
 import { findById } from '@/api/user'
-import { goodsList } from '@/api/goods'
+import {goodsBySellerId, goodsList} from '@/api/goods'
 import cookie from 'js-cookie'
 
 export default {
@@ -107,7 +103,6 @@ export default {
   },
   created() {
     if (this.$route.params.id) {
-      console.log(this.$route.params.id, 'id')
       this.getUserInfo(this.$route.params.id)
       this.getGoodsByUserId(this.$route.params.id)
       this.showInfo()
@@ -116,14 +111,12 @@ export default {
   methods: {
     getUserInfo(id) {
       findById(id).then(res => {
-        console.log(res, 'user')
         this.user = res.data.data
       })
     },
-    getGoodsByUserId(id) {
-      goodsList(-1, -1, { sellerId: id }).then(res => {
-        console.log(res, 'goods')
-        this.goodsList = res.data.data.rows
+    getGoodsByUserId() {
+      goodsBySellerId({sellerId: this.loginInfo.userId}).then(response => {
+        this.goodsList = response.data.data
       })
     },
     showInfo() {
@@ -133,7 +126,6 @@ export default {
       }
     },
     goBack(){
-      console.log("11111111")
       this.$router.go(-1);
     }
   }
