@@ -11,8 +11,8 @@
       <table class="GoodList">
         <tbody>
         <tr>
-          <th class="name">商品</th>
-          <th class="name">数量</th>
+          <th class="priceNew">商品</th>
+          <th class="priceNew">数量</th>
           <th class="priceNew">价格</th>
         </tr>
         </tbody>

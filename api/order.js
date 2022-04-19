@@ -61,3 +61,18 @@ export function updateOrSaveOrder(order) {
     data: order
   })
 }
+
+//发
+export function updateFaState(id) {
+  return request({
+    url: `/order/updateFaState/${id}`,
+    method: 'get'
+  })
+}
+//收
+export function updateShouState(id) {
+  return request({
+    url: `/order/updateShouState/${id}`,
+    method: 'get'
+  })
+}

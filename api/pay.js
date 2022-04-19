@@ -16,6 +16,13 @@ export function payIds(ids) {
   })
 }
 
+export function twoPay(orderNum) {
+  return request({
+    url: `/pay/twoPay/${orderNum}`,
+    method: 'get'
+  })
+}
+
 export function payQuery(orderId,userId) {
   return request({
     url: `/pay/query/${orderId}/${userId}`,

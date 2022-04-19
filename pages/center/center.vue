@@ -17,7 +17,7 @@
           <div v-if="favList == null || favList.length == 0">
             <div style="margin-left: 100px">您的收藏为空</div>
           </div>
-          <div v-for="(good) in favList" :key="good.goodsId" class="main">
+          <div v-for="(good,index) in favList" :key="index" class="main">
             <div class="item-list">
               <div class="item-list tip_empty">
                 <div class="item-box">
@@ -66,11 +66,12 @@
           <h3 style="margin-top: 30px;margin-left: 50px">我的购物车</h3>
           <el-button type="success" @click="buyGoods" style="float: right;margin-right: 100px;margin-bottom: 50px">购买
           </el-button>
+          <div style="float: right ;margin-top: 30px;margin-right: 50px">点击选择购买</div>
           <div v-if="cartList == null || cartList.length==0 ">
             <div style="margin-left: 100px">您的购物车为空</div>
           </div>
           <el-checkbox-group v-model="buyList">
-            <div v-for="(good,index) in cartList" :key="good.goodsId" class="main">
+            <div v-for="(good,index) in cartList" :key="index" class="main">
               <el-checkbox :label="good.cartId"
                            :true-label="good.cartId"
                            :false-label="good.cartId" @change="addGoodsId"
@@ -106,11 +107,11 @@
                         <a
                           class="btn_down"
                           :href="'../goods/'+good.goodsId"
-                          >详情</a>
+                        >详情</a>
                         <div
                           class="btn_preview"
                           @click="removeCart(good)"
-                          >删除
+                        >删除
                         </div>
                       </div>
                     </div>
@@ -120,23 +121,24 @@
             </div>
           </el-checkbox-group>
         </el-tab-pane>
-        <el-tab-pane label="我的订单" class="mypane">
-          <h3 style="margin-top: 30px;margin-left: 50px">我的订单</h3>
+        <!--      我的购买-->
+        <el-tab-pane label="我的购买" class="mypane">
+          <h3 style="margin-top: 30px;margin-left: 50px">我的购买</h3>
           <div v-if="orderList == null || orderList.length == 0">
-            <div style="margin-left: 100px">您的订单为空</div>
+            <div style="margin-left: 100px">您没有购买过商品</div>
           </div>
-          <div v-for="(good) in orderList" :key="good.goodsId" class="main">
+          <div v-for="(good,index) in orderList" :key="index" class="main">
             <div class="item-list">
               <div class="item-list tip_empty">
                 <div class="item-box">
-                  <div class="item-box_imageContainer"><a :href="'../goods/'+good.goodsId" ><img
+                  <div class="item-box_imageContainer"><a :href="'../goods/'+good.goodsId"><img
                     :src="good.goodsPicture1"
                     :alt="good.goodsName"
                     style="height: 250px;width: 250px"
                   ></a>
                   </div>
                   <div class="item-box_content">
-                    <h3><a class="item-box_title" :href="'../goods/'+good.goodsId" >{{
+                    <h3><a class="item-box_title" :href="'../goods/'+good.goodsId">{{
                         good.goodsName
                       }}</a></h3>
                     <div class="intro">
@@ -163,9 +165,69 @@
                       title="点击收藏"/></a></div>
                     <div class="item-box_alignBottom">
                       <a
-                        class="btn_preview"
+                        class="btn_preview" style="margin-right: 10px"
                         :href="'../goods/'+good.goodsId"
-                        >再次购买</a>
+                      >再次购买</a>
+                      <div @click="twoPay(good.orderNum)"
+                           v-if="good.orderState=='未支付'"
+                           class="btn_preview"
+                      > {{ good.orderState=='未支付' ?'点击支付 ': good.orderState }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </el-tab-pane>
+        <!--      我卖的商品  -->
+        <el-tab-pane label="我的售卖">
+          <h3 style="margin-top: 30px;margin-left: 50px">我的售卖</h3>
+          <div v-if="sellerOrderList == null || orderList.length == 0">
+            <div style="margin-left: 100px">您没有卖出过商品</div>
+          </div>
+          <div v-for="(good,index) in sellerOrderList" :key="index" class="main">
+            <div class="item-list">
+              <div class="item-list tip_empty">
+                <div class="item-box">
+                  <div class="item-box_imageContainer"><a :href="'../goods/'+good.goodsId"><img
+                    :src="good.goodsPicture1"
+                    :alt="good.goodsName"
+                    style="height: 250px;width: 250px"
+                  ></a>
+                  </div>
+                  <div class="item-box_content">
+                    <h3><a class="item-box_title" :href="'../goods/'+good.goodsId">{{
+                        good.goodsName
+                      }}</a></h3>
+                    <div class="intro">
+                      {{ good.goodsDescribe }}
+                    </div>
+                  </div>
+                  <div class="item-box_footer">
+                    <div class="item-box_detailsItem" style="margin-bottom: 7px"><i
+                      class="icon icon-rl sm"/>订单号：{{ good.orderNum }}
+                    </div>
+                    <div class="item-box_detailsItem" style="margin-bottom: 7px"><i
+                      class="icon icon-rl sm"/>交易数量：{{ good.orderShu }}
+                    </div>
+                    <div class="item-box_detailsItem" style="margin-bottom: 7px"><i
+                      class="icon icon-rl sm"/>交易时间：{{ good.orderTime }}
+                    </div>
+                    <div class="item-box_detailsItem" style="margin-bottom: 7px"><i
+                      class="icon icon-rl sm"/>交易地点：{{ good.orderAddress }}
+                    </div>
+                    <div class="item-box_detailsItem"><i class="icon icon-wenjianbao sm"/>订单价格: ￥{{ good.goodsPrice }}
+                    </div>
+                    <div class="item-box_footerButtons"><a class="circleButton btn_like" _id="12110"><i
+                      class="icon icon-guanzhu big_24"
+                      title="点击收藏"/></a></div>
+                    <div class="item-box_alignBottom">
+                      已交易？点击确认
+                      <div @click="fahuole(index)"
+                           class="btn_preview"
+                      >{{ good.orderState }}
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -178,7 +240,7 @@
           <div v-if="goodsList== null || goodsList.length == 0">
             <div style="margin-left: 100px">您还没有商品</div>
           </div>
-          <div v-for="(good) in goodsList" :key="good.goodsId" class="main">
+          <div v-for="(good,index) in goodsList" :key="index" class="main">
             <div class="item-list">
               <div class="item-list tip_empty">
                 <div class="item-box">
@@ -189,7 +251,7 @@
                   ></a>
                   </div>
                   <div class="item-box_content">
-                    <h3><a class="item-box_title" :href="'../goods/'+good.goodsId" >{{
+                    <h3><a class="item-box_title" :href="'../goods/'+good.goodsId">{{
                         good.goodsName
                       }}</a></h3>
                     <div class="intro">
@@ -209,15 +271,17 @@
                       <a
                         class="btn_down"
                         :href="'../goods/'+good.goodsId"
-                        >详情</a>
-                      <a
+                      >详情</a>
+                      <div
                         class="btn_down"
-                        :href="'../goods/'+good.goodsId"
-                        >修改</a>
-                      <a
+                        @click="updateMyGoods(index)"
+                      >修改
+                      </div>
+                      <div
                         class="btn_down"
-                        :href="'../goods/'+good.goodsId"
-                       >删除</a>
+                        @click="deleteMyGoods(index)"
+                      >删除
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -226,79 +290,85 @@
           </div>
         </el-tab-pane>
         <el-tab-pane label="发布商品">
-
           <el-button type="primary" style="margin-top: 30px;margin-left: 50px" @click="dialogVisible = true">发布商品
           </el-button>
-
-
-          <el-dialog
-            title="发布商品"
-            :visible.sync="dialogVisible"
-            width="30%"
-            :before-close="handleClose">
-
-            <div class="app-container">
-              <el-form label-width="auto" :rules="rules" :model="goodsForm" :ref="goodsForm">
-                <el-form-item label="商品名称">
-                  <el-input v-model="goodsForm.goodsName" maxlength="10" show-word-limit/>
-                </el-form-item>
-                <el-form-item
-                  label="商品价格"
-                  prop="goodsPrice">
-                  <el-input v-model.number="goodsForm.goodsPrice"/>
-                </el-form-item>
-
-                <el-form-item label="卖家名称">
-                  <el-select v-model="goodsForm.sellerId" clearable placeholder="请选择卖家名称">
-                    <el-option
-                      v-for="item in users"
-                      :key="item.userId"
-                      :label="item.userName"
-                      :value="item.userId">
-                    </el-option>
-                  </el-select>
-                </el-form-item>
-
-                <el-form-item label="商品类别">
-                  <el-select v-model="goodsForm.categoryId" clearable placeholder="请选择">
-                    <el-option
-                      v-for="item in categorys"
-                      :key="item.categoryId"
-                      :label="item.categoryName"
-                      :value="item.categoryId">
-                    </el-option>
-                  </el-select>
-                </el-form-item>
-                <!--     图片上传-->
-                <el-form-item label="商品图片">
-                  <el-upload
-                    class="upload-demo"
-                    action="http://localhost:9528/dev-api/oss/fileOss"
-                    :on-preview="handlePreview"
-                    :on-remove="handleRemove"
-                    :before-remove="beforeRemove"
-                    :on-success="successUpload"
-                    :on-change="changeUpload"
-                    :file-list="fileList"
-                    :limit="3"
-                    list-type="picture">
-                    <el-button size="small" type="primary">点击上传</el-button>
-                  </el-upload>
-                </el-form-item>
-                <el-form-item label="商品描述">
-                  <el-input v-model="goodsForm.goodsDescribe" :rows="10" type="textarea" maxlength="200"
-                            show-word-limit/>
-                </el-form-item>
-                <el-form-item>
-                  <el-button :disabled="saveBtnDisabled" type="primary"
-                             @click="saveOrUpdate(goodsForm)">保存
-                  </el-button>
-                </el-form-item>
-              </el-form>
-            </div>
-          </el-dialog>
         </el-tab-pane>
+        <el-dialog
+          title="发布商品"
+          :visible.sync="dialogVisible"
+          width="50%"
+          :before-close="handleClose">
+          <div class="app-container">
+            <el-form label-width="auto" :rules="rules" :model="goodsForm" :ref="goodsForm">
+              <el-form-item label="商品名称">
+                <el-input v-model="goodsForm.goodsName" maxlength="50" show-word-limit/>
+              </el-form-item>
+              <el-form-item
+                label="商品价格"
+                prop="goodsPrice">
+                <el-input v-model.number="goodsForm.goodsPrice"/>
+              </el-form-item>
+              <el-form-item
+                label="商品数量"
+                prop="num">
+                <el-input v-model.number="goodsForm.num"/>
+              </el-form-item>
 
+
+              <!--              <el-form-item label="卖家名称">-->
+              <!--                <el-select v-model="goodsForm.sellerId" clearable placeholder="请选择卖家名称">-->
+              <!--                  <el-option-->
+              <!--                    v-for="item in users"-->
+              <!--                    :key="item.userId"-->
+              <!--                    :label="item.userName"-->
+              <!--                    :value="item.userId">-->
+              <!--                  </el-option>-->
+              <!--                </el-select>-->
+              <!--              </el-form-item>-->
+
+              <el-form-item label="商品类别">
+                <el-select v-model="goodsForm.categoryId" clearable placeholder="请选择">
+                  <el-option
+                    v-for="item in categorys"
+                    :key="item.categoryId"
+                    :label="item.categoryName"
+                    :value="item.categoryId">
+                  </el-option>
+                </el-select>
+              </el-form-item>
+              <!--     图片上传-->
+              <el-form-item label="商品图片">
+                <el-upload
+                  class="upload-demo"
+                  action="http://localhost:9528/dev-api/oss/fileOss"
+                  :on-preview="handlePreview"
+                  :on-remove="handleRemove"
+                  :before-remove="beforeRemove"
+                  :on-success="successUpload"
+                  :on-change="changeUpload"
+                  :show-file-list="false"
+                  :limit="3"
+                  list-type="picture">
+                  <img v-if="goodsForm.goodsPicture1" :src="goodsForm.goodsPicture1" class="avatar">
+                  <el-button size="small" type="primary">点击上传</el-button>
+                </el-upload>
+              </el-form-item>
+              <el-form-item label="商品描述">
+                <el-input v-model="goodsForm.goodsDescribe" :rows="10" type="textarea" maxlength="200"
+                          show-word-limit/>
+              </el-form-item>
+              <el-form-item>
+                <el-button type="primary" style="margin-left: 300px"
+                           @click="cancel(goodsForm)">取消
+                </el-button>
+                <el-button :disabled="saveBtnDisabled" type="primary"
+                           @click="saveOrUpdate(goodsForm)">保存
+                </el-button>
+
+              </el-form-item>
+            </el-form>
+          </div>
+        </el-dialog>
       </el-tabs>
     </div>
   </div>
@@ -306,13 +376,14 @@
 <script>
 import MyMessage from '@/pages/center/myMessage'
 import cookie from 'js-cookie'
-import {goodsBySellerId, updateOrSaveGoods} from '@/api/goods'
+import {goodsBySellerId, removeGoodsById, updateOrSaveGoods} from '@/api/goods'
 import {listByCart, removeCart, removeCartById} from '@/api/cart'
-import {listByOrder} from '@/api/order'
+import {listByOrder, updateFaState} from '@/api/order'
 import Show from "@/components/show";
 import {categoryList} from "@/api/category";
 import {userList} from "@/api/user";
 import {listFav, removeFav} from "@/api/fav";
+import {twoPay} from "@/api/pay";
 
 export default {
   name: 'Center',
@@ -327,6 +398,7 @@ export default {
       goodsList: [],
       cartList: [],
       orderList: [],
+      sellerOrderList: [],
       favList: [],
       dialogVisible: false,
       fileList: [],
@@ -368,7 +440,8 @@ export default {
     // 获取用户购物车列表
     this.getCartList()
     // 获取用户订单列表
-    this.getOrderList()
+    this.getMyBuyOrderList() //我购买的
+    this.getMyOwnOrderList() //我出售的
     this.getFavList()
 
     this.showCategoryList();
@@ -379,6 +452,50 @@ export default {
     }).catch(error => console.log("获取用户列表失败"))
   },
   methods: {
+    //未支付再次支付
+    twoPay(orderNum){
+      this.$router.push({path: '/pay/twoPay',query:{orderNum}})
+    },
+
+    fahuole(index) {
+      id(this.sellerOrderList[index].orderState == "未发货")
+      {
+        this.sellerOrderList[index].orderState = "已发货"
+        updateFaState(this.sellerOrderList[index].orderId).then(res => {
+          this.$message.success("修改成功")
+        })
+      }
+    },
+
+    shouhuole(index) {
+      id(this.orderList[index].orderState == "已发货")
+      {
+        this.orderList[index].orderState = "已收货"
+        updateFaState(this.sellerOrderList[index].orderId).then(res => {
+          this.$message.success("修改成功")
+        })
+      }
+    },
+
+    cancel() {
+      this.dialogVisible = false
+      this.goodsForm = {}
+    },
+
+    //删除我的商品
+    deleteMyGoods(index) {
+      console.log(index, "delete")
+      var id = this.goodsList[index].goodsId
+      removeGoodsById(id).then(res => {
+        this.$message.success("删除成功")
+      })
+    },
+    //更新我的商品
+    updateMyGoods(index) {
+      console.log(index, "update")
+      this.dialogVisible = true
+      this.goodsForm = this.goodsList[index]
+    },
     addGoodsId(val) {
       console.log(val, "change")
       //标记法
@@ -441,9 +558,16 @@ export default {
         this.cartList = response.data.data
       })
     },
-    getOrderList() {
+    //我买的
+    getMyBuyOrderList() {
       listByOrder({userId: this.loginInfo.userId}).then(response => {
         this.orderList = response.data.data
+      })
+    },
+    //我出售的
+    getMyOwnOrderList() {
+      listByOrder({sellerId: this.loginInfo.userId}).then(response => {
+        this.sellerOrderList = response.data.data
       })
     },
     // 登录人信息
@@ -471,15 +595,7 @@ export default {
       this.saveBtnDisabled = true;//让保存按钮不可多次点击
       this.dialogVisible = false
       //将fileList的值转换为picture
-      if (this.fileList[0]) {
-        this.goodsForm.goodsPicture1 = this.fileList[0].url;
-      }
-      if (this.fileList[1]) {
-        this.goodsForm.goodsPicture2 = this.fileList[1].url;
-      }
-      if (this.fileList[2]) {
-        this.goodsForm.goodsPicture3 = this.fileList[2].url;
-      }
+
       //添加商品信息
       updateOrSaveGoods(this.goodsForm).then(
         response => {
@@ -489,9 +605,11 @@ export default {
 
           });
           this.saveBtnDisabled = false;
-          this.$router.push('/goods/goodsList')
+
         }
       )
+      //重新加载页面
+      location.reload()
     },
     //  图片上传
     handleRemove(file, fileList) {
@@ -509,7 +627,7 @@ export default {
       file.name = "Picture";
     },
     successUpload(res, file) {
-      this.fileList.push({name: "Picture", url: res.data.url});
+      this.goodsForm.goodsPicture1 = res.data.url
     },
     goBack() {
       console.log("11111111")
