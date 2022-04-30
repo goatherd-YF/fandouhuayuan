@@ -13,7 +13,9 @@
     "precommit": "npm run lint"
   },
   "dependencies": {
+    "@jyeontu/jvuewheel": "^0.4.1",
     "axios": "^0.26.0",
+    "big-integer": "^1.6.51",
     "element-ui": "^2.15.6",
     "js-cookie": "^3.0.1",
     "nuxt": "^2.0.0",

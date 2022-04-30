@@ -14,7 +14,6 @@
         <el-table-column
           label="序号"
           width="70"
-
           align="center">
           <template slot-scope="scope">
             第 {{ scope.$index+1 }} 名

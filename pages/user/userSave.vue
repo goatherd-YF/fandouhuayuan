@@ -156,7 +156,6 @@ export default {
           this.saveBtnDisabled = false
         // 更新cookie
         cookie.set('loginUser', JSON.stringify(this.loginInfo), {domain: 'localhost'})
-        console.log(JSON.parse( cookie.get('loginUser')))
         }
       )
 

@@ -15,7 +15,8 @@
         <div>
           <article class="c-v-pic-wrap" style="height: 357px;margin-left: 100px;width: 500px;">
             <section class="p-h-video-box" id="videoPlay">
-              <img height="357px" :src="goods.goodsPicture1?goods.goodsPicture1:''" :alt="goods.goodsName" class="dis c-v-pic">
+              <img height="357px" :src="goods.goodsPicture1?goods.goodsPicture1:''" :alt="goods.goodsName"
+                   class="dis c-v-pic">
             </section>
           </article>
           <aside class="c-attr-wrap" style=" width: 480px; margin-right: 50px">
@@ -41,8 +42,9 @@
               </span>
               </section>
               <section class="c-attr-mt">
-                <div @click="buyGoods(goods.goodsId)" title="立即购买" class="comm-btn c-btn-3" v-if="goods.num != 0">立即购买</div>
-                <div  title="已下架" class="comm-btn c-btn-3" v-if="goods.num == 0">已下架</div>
+                <div @click="buyGoods(goods.goodsId)" title="立即购买" class="comm-btn c-btn-3" v-if="goods.num != 0">立即购买
+                </div>
+                <div title="已下架" class="comm-btn c-btn-3" v-if="goods.num == 0">已下架</div>
               </section>
             </section>
 
@@ -76,6 +78,18 @@
           </article>
           <div class="clear"></div>
         </div>
+        <!--        评论-->
+        <div>
+          <div style="margin-top: 20px">商品评论</div>
+          <j-comment
+            title="欢迎评论"
+            :key-map="keyMap"
+            :showNumber="1"
+            :comment-datas="commentDatas"
+            @submitComment="submitComment">
+          </j-comment>
+        </div>
+
       </section>
     </div>
   </div>
@@ -86,6 +100,8 @@ import {findById} from '@/api/goods'
 import {addFav, queryFav, removeFav} from "@/api/fav";
 import cookie from "js-cookie";
 import {createOrders} from "@/api/order";
+import {addReply, getReply} from "@/api/replay";
+import {snowId} from "@/utils/snowId"
 
 export default {
 
@@ -93,7 +109,6 @@ export default {
 
     return findById(params.id)
       .then(response => {
-        console.log(response.data.data)
         return {
           goods: response.data.data
 
@@ -104,22 +119,48 @@ export default {
   data() {
     return {
       showFav: true,
-      loginInfo: {}
+      loginInfo: {},
+      keyMap: {
+        pid: "parent_comment_id",
+        id: "id",
+        isAdmin: "admin_comment"
+      },
+      commentDatas: []
     }
   },
   created() {
     this.getFav()
-
+    this.getReply()
   },
 
   methods: {
+    submitComment(item) {
+      const cid = {
+        parentCommentId: item.pid,
+        content: item.content,
+        userId: this.loginInfo.userId,
+        goodsId: this.$route.params.id
+      }
+      addReply(cid).then(res => {
+        this.$message.success(res.data.msg)
+        this.getReply();
+      })
 
+    },
+    getReply() {
+      getReply(this.$route.params.id).then(res => {
+        this.commentDatas = res.data.data
+        this.commentDatas.forEach(item => {
+          if (item.parent_comment_id == '') {
+            item.parent_comment_id = null
+          }
+        })
+      })
+    },
     getFav() {
-
       let jsonStr = cookie.get('loginUser')
       if (jsonStr) {
         this.loginInfo = JSON.parse(jsonStr)
-
         if (this.loginInfo) {
           //查询收藏
           queryFav({goodsId: this.$route.params.id, userId: this.loginInfo.userId}).then(res => {
@@ -130,11 +171,13 @@ export default {
         }
       }
 
-    },
+    }
+    ,
 
     buyGoods(goodsId) {
       this.$router.push({path: '/order/' + goodsId})
-    },
+    }
+    ,
     changeShowFav() {
       this.showFav = !this.showFav
       if (!this.showFav) {
@@ -147,14 +190,16 @@ export default {
           this.$message.success("已取消")
         })
       }
-    },
+    }
+    ,
 
     showInfo() {
       let jsonStr = cookie.get('loginUser')
       if (jsonStr) {
         this.loginInfo = JSON.parse(jsonStr)
       }
-    },
+    }
+    ,
     goBack() {
       this.$router.go(-1);
     }

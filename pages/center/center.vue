@@ -455,7 +455,6 @@ export default {
 
     //删除我的商品
     deleteMyGoods(index) {
-      debugger
       const id = this.goodsList[index].goodsId
       removeGoodsById(id).then(res => {
         this.$message.success("删除成功")
