@@ -197,7 +197,7 @@ export default {
       this.filterList = this.unitList.filter(item => item.goodsCata == tab.index)
     },
     getGoodsList() {
-      goodsList(1, 8, {goodsState: 'true'}).then(response => {
+      goodsList(1, 10, {goodsState: 'true'}).then(response => {
         this.goodsList = response.data.data.rows
       })
     },
