@@ -89,8 +89,8 @@
   </div>
 </template>
 <script>
-import { findById } from '@/api/user'
-import {goodsBySellerId, goodsList} from '@/api/goods'
+import {findById} from '@/api/user'
+import {goodsBySellerId} from '@/api/goods'
 import cookie from 'js-cookie'
 
 export default {
@@ -103,9 +103,9 @@ export default {
   },
   created() {
     if (this.$route.params.id) {
+      this.showInfo()
       this.getUserInfo(this.$route.params.id)
       this.getGoodsByUserId(this.$route.params.id)
-      this.showInfo()
     }
   },
   methods: {
@@ -115,7 +115,7 @@ export default {
       })
     },
     getGoodsByUserId() {
-      goodsBySellerId({sellerId: this.loginInfo.userId}).then(response => {
+      goodsBySellerId({sellerId: this.$route.params.id}).then(response => {
         this.goodsList = response.data.data
       })
     },

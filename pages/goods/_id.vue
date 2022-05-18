@@ -99,9 +99,7 @@
 import {findById} from '@/api/goods'
 import {addFav, queryFav, removeFav} from "@/api/fav";
 import cookie from "js-cookie";
-import {createOrders} from "@/api/order";
 import {addReply, getReply} from "@/api/replay";
-import {snowId} from "@/utils/snowId"
 
 export default {
 

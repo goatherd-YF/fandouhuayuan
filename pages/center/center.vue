@@ -365,7 +365,7 @@
 import MyMessage from '@/pages/center/myMessage'
 import cookie from 'js-cookie'
 import {goodsBySellerId, removeGoodsById, updateOrSaveGoods} from '@/api/goods'
-import {listByCart, removeCart } from '@/api/cart'
+import {listByCart, removeCart} from '@/api/cart'
 import {listByOrder, updateFaState} from '@/api/order'
 import Show from "@/components/show";
 import {categoryList} from "@/api/category";
@@ -439,7 +439,7 @@ export default {
     },
 
     fahuole(index) {
-      if(this.sellerOrderList[index].orderState == "未发货") {
+      if(this.sellerOrderList[index].orderState == "已支付") {
         this.sellerOrderList[index].orderState = "已交易"
         updateFaState(this.sellerOrderList[index].orderId).then(res => {
           this.$message.success("修改成功")

@@ -55,7 +55,7 @@
 import '~/assets/css/sign.css'
 import '~/assets/css/iconfont.css'
 import cookie from 'js-cookie'
-import { loginUser, getUserLoginInfo, weChatLogin } from '@/api/login'
+import {getUserLoginInfo, loginUser, weChatLogin} from '@/api/login'
 
 export default {
   layout: 'sign',

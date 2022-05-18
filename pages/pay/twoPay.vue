@@ -5,8 +5,7 @@
 
 <script>
 
-import cookie from "js-cookie";
-import {pay, twoPay} from "@/api/pay";
+import {twoPay} from "@/api/pay";
 
 export default {
   name: 'GoodStr',

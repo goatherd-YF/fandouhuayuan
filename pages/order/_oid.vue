@@ -79,10 +79,7 @@
   </div>
 </template>
 <script>
-import {getOrdersInfo} from '@/api/order'
 import {findById} from "@/api/goods";
-import cookie from "js-cookie";
-import {pay} from "@/api/pay";
 
 export default {
   asyncData({params, error}) {

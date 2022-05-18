@@ -2,8 +2,9 @@
   <div id="aCoursesList" class="bg-fa of">
     <el-page-header @back="goBack"  style="margin-left: 50px;margin-top: 50px">
     </el-page-header>
-    <!-- 讲师列表 开始 -->
+    <!-- 商家列表 开始 -->
     <section class="container">
+        <el-input v-model="searchName" placeholder="请输入内容" style="width: 50%"/> <el-button @click="searchUser">搜索</el-button>
       <header class="comm-title all-teacher-title">
         <h2 class="fl tac">
           <span class="c-333">全部用户</span>
@@ -69,11 +70,12 @@
   </div>
 </template>
 <script>
-import { userList } from '@/api/user'
+import {userList} from '@/api/user'
 
 export default {
   data() {
     return {
+      searchName:'',
       list: null, // 结果
       page: 1, // 页数
       limit: 8, // 数据量
@@ -102,7 +104,19 @@ export default {
     },
     goBack(){
       this.$router.go(-1);
+    },
+    searchUser(){
+      userList(this.page, this.limit, {userName:this.searchName})
+        .then(response => {
+          // request success
+          // response接口返回数据
+          this.list = response.data.data.rows
+          this.total = response.data.data.total
+        }).catch(error=>{
+        console.log(error,"user.vue.99")
+      })
     }
+
 
 }
 }

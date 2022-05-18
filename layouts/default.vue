@@ -154,8 +154,7 @@ import '~/assets/css/order.css'
 import '~/assets/css/swiper-3.3.1.min.css'
 import "~/assets/css/pages-weixinpay.css"
 import cookie from 'js-cookie'
-import { getUserLoginInfo } from '@/api/login'
-import {goodsList} from "@/api/goods";
+import {getUserLoginInfo} from '@/api/login'
 import Search from "@/components/search";
 
 export default {

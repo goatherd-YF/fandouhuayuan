@@ -75,8 +75,7 @@
   </div>
 </template>
 <script>
-import {getOrdersInfo, getOrdersInfoByIds} from '@/api/order'
-import {payIds} from "@/api/pay";
+import {getOrdersInfoByIds} from '@/api/order'
 import cookie from "js-cookie";
 
 export default {

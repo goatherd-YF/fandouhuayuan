@@ -112,8 +112,7 @@
 <script>
 import {goodsList} from '@/api/goods'
 import {categoryList} from '@/api/category'
-import {addCart, listByCart, removeCart, removeCartById, updateOrSaveCart} from "@/api/cart";
-import {getLoginInfo} from "@/api/loginInfo";
+import {addCart, listByCart, removeCart} from "@/api/cart";
 import cookie from "js-cookie";
 
 export default {

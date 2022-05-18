@@ -4,7 +4,7 @@
 </template>
 
 <script>
-import {pay, payIds} from "@/api/pay";
+import {payIds} from "@/api/pay";
 import cookie from "js-cookie";
 
 export default {

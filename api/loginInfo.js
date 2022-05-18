@@ -1,4 +1,3 @@
-import request from '@/utils/request'
 import cookie from "js-cookie";
 
 export function getLoginInfo() {
